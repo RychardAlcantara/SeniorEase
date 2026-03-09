@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SeniorEase
 
-## Getting Started
+SeniorEase é uma plataforma digital acessível desenvolvida para ajudar pessoas idosas a gerenciar tarefas acadêmicas e profissionais de forma simples, intuitiva e segura.
 
-First, run the development server:
+O projeto foi criado com foco em acessibilidade digital, reduzindo barreiras comuns enfrentadas por usuários da terceira idade ao utilizar sistemas modernos.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Objetivo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O objetivo do SeniorEase é promover inclusão digital, autonomia e confiança para pessoas idosas ao utilizar plataformas digitais.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A aplicação foi projetada considerando dificuldades comuns relatadas por esse público, como:
 
-## Learn More
+- perda gradual de memória
+- dificuldades de visão (baixo contraste e fontes pequenas)
+- redução da coordenação motora fina
+- pouca familiaridade com interfaces digitais modernas
+- medo de cometer erros irreversíveis
+- dificuldade em compreender fluxos complexos
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Problemas Identificados
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Usuários idosos relataram dificuldades ao utilizar plataformas digitais atuais devido a:
 
-## Deploy on Vercel
+- excesso de informação na tela
+- botões pequenos
+- fontes reduzidas
+- baixo contraste
+- navegação pouco intuitiva
+- ausência de feedback após ações
+- fluxos com muitas etapas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Solução Proposta
+
+SeniorEase foi desenvolvido para oferecer uma experiência digital simplificada com:
+
+- interface limpa e intuitiva
+- botões grandes e acessíveis
+- alto contraste visual
+- feedback claro após ações
+- navegação simples
+- fluxo reduzido de tarefas
+- tutorial de ajuda integrado
+
+---
+
+## Funcionalidades
+
+- Login do usuário
+- Visualização de tarefas
+- Criação de novas tarefas
+- Edição de tarefas
+- Conclusão de tarefas
+- Histórico de tarefas concluídas
+- Painel de ajuda e tutorial
+
+---
+
+## Tecnologias Utilizadas
+
+- Next.js
+- React
+- TypeScript
+- TailwindCSS
+- Lucide Icons
+
+---
+
+## Arquitetura
+
+O projeto utiliza princípios de arquitetura limpa (Clean Architecture) e componentização para garantir organização, escalabilidade e manutenção do código.
+
+Estrutura simplificada:
