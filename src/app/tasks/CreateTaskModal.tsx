@@ -17,6 +17,11 @@ export default function CreateTaskModal({
   open,
   onClose,
 }: CreateTaskModalProps) {
+  function onSave() {
+    console.log("enviar tarefa para firebase");
+    onClose();
+  }
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Qual é a tarefa?</DialogTitle>
@@ -30,7 +35,7 @@ export default function CreateTaskModal({
         <Button onClick={onClose} color="inherit">
           Cancelar
         </Button>
-        <Button variant="contained" onClick={onClose}>
+        <Button variant="contained" onClick={onSave}>
           Salvar
         </Button>
       </DialogActions>
