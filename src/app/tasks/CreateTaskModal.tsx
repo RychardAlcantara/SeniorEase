@@ -1,12 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Stack,
-} from "@mui/material";
+import Modal from "@/src/presentation/components/Modal";
 
 interface CreateTaskModalProps {
   open: boolean;
@@ -23,22 +15,11 @@ export default function CreateTaskModal({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Qual é a tarefa?</DialogTitle>
-
-      <DialogContent dividers>
-        <Stack spacing={2}>
-          <TextField label="Qual é a tarefa?" fullWidth />
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="inherit">
-          Cancelar
-        </Button>
-        <Button variant="contained" onClick={onSave}>
-          Salvar
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Modal
+      title="Criar nova tarefa"
+      open={open}
+      onClose={onClose}
+      onSave={onSave}
+    />
   );
 }

@@ -2,12 +2,19 @@
 
 import { Card, CardContent, Typography, Stack } from "@mui/material";
 import TaskItem from "./TaskItem";
+import { Task } from "@/src/interface/task";
 
-export default function TaskList() {
+export default function TaskList({
+  setEditOpen,
+  setTask,
+}: {
+  setEditOpen: (open: boolean) => void;
+  setTask: (task: Task) => void;
+}) {
   const tasks = [
-    "Digite a tarefa...",
-    "Participar da aula online",
-    "Enviar documento",
+    { id: "2", title: "Participar da reunião", status: "concluída" },
+    { id: "3", title: "Enviar documento", status: "pendente" },
+    { id: "4", title: "Tomar medicamento", status: "pendente" },
   ];
 
   return (
@@ -20,12 +27,17 @@ export default function TaskList() {
     >
       <CardContent sx={{ p: 3 /* ~ p-6 */ }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-          Tomar medicamento
+          Minhas Tarefas
         </Typography>
 
         <Stack spacing={0}>
           {tasks.map((task, index) => (
-            <TaskItem key={index} title={task} />
+            <TaskItem
+              key={index}
+              task={task}
+              setOpen={setEditOpen}
+              setTask={setTask}
+            />
           ))}
         </Stack>
       </CardContent>

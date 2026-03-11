@@ -1,12 +1,18 @@
 "use client";
 
+import TaskItemProps from "@/src/interface/taskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 
-interface Props {
-  title: string;
-}
+export default function TaskItem({ task, setOpen, setTask }: TaskItemProps) {
+  function editItem() {
+    setTask({
+      id: task.id,
+      title: task.title,
+      status: task.status,
+    });
+    setOpen(true);
+  }
 
-export default function TaskItem({ title }: Props) {
   return (
     <Box
       sx={{
@@ -40,7 +46,7 @@ export default function TaskItem({ title }: Props) {
             sx={{ fontSize: "1.125rem", color: "grey.800" }}
             noWrap
           >
-            {title}
+            {task.title}
           </Typography>
         </Stack>
 
@@ -56,6 +62,7 @@ export default function TaskItem({ title }: Props) {
           <Button
             variant="contained"
             size="small"
+            onClick={editItem}
             sx={{
               textTransform: "none",
               borderRadius: 1,

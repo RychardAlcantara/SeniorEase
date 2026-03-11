@@ -1,10 +1,6 @@
 import { Button } from "@mui/material";
 
-interface CreateTaskButtonProps {
-  onClick?: () => void;
-}
-
-export default function CreateTaskButton({ onClick }: CreateTaskButtonProps) {
+export default function CreateTaskButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       fullWidth
