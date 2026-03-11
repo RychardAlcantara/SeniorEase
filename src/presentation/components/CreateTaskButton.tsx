@@ -1,22 +1,24 @@
 import { Button } from "@mui/material";
 
-export default function CreateTaskButton() {
+interface CreateTaskButtonProps {
+  onClick?: () => void;
+}
+
+export default function CreateTaskButton({ onClick }: CreateTaskButtonProps) {
   return (
     <Button
       fullWidth
+      onClick={onClick}
       sx={{
-        mt: 6,
-        py: 1.5, // ~ equivalente ao py-3 do Tailwind
+        mt: 3,
+        py: 1.5,
         textTransform: "none",
         fontWeight: 700,
-        fontSize: "1.25rem",
-        borderRadius: "12px", // mais próximo do rounded-lg
+        fontSize: "1.125rem",
+        borderRadius: 2,
         color: "#fff",
         backgroundImage: "linear-gradient(to right, #00b0ff, #3a7bd5)",
-        "&:hover": {
-          opacity: 0.9,
-          backgroundImage: "linear-gradient(to right, #00a3f0, #3670c7)",
-        },
+        "&:hover": { opacity: 0.9 },
       }}
     >
       + Criar Nova Tarefa
