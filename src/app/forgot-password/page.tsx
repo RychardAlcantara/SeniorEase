@@ -1,29 +1,27 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { AuthCard } from "@/src/presentation/components/auth/AuthCard"
 import { AuthInput } from "@/src/presentation/components/auth/AuthInput"
-import { PasswordInput } from "@/src/presentation/components/auth/PasswordInput"
 import { AuthButton } from "@/src/presentation/components/auth/AuthButton"
 import { AuthLink } from "@/src/presentation/components/auth/AuthLink"
 import { AlertMessage } from "@/src/presentation/components/auth/AlertMessage"
-import { signInUseCase } from "@/src/infrastructure/container"
+import { forgotPasswordUseCase } from "@/src/infrastructure/container"
 
-export default function LoginPage() {
-  const router = useRouter()
-
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   async function handleSubmit() {
     setError("")
+    setSuccess("")
     setLoading(true)
     try {
-      await signInUseCase.execute(email, password)
-      router.push("/dashboard")
+      await forgotPasswordUseCase.execute(email)
+      setSuccess("E-mail de recuperação enviado! Verifique sua caixa de entrada.")
+      setEmail("")
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -32,9 +30,13 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthCard title="Login" subtitle="Plataforma acessível para você">
+    <AuthCard
+      title="Recuperar Senha"
+      subtitle="Informe seu e-mail para receber o link de recuperação"
+    >
 
       {error && <AlertMessage type="error" message={error} />}
+      {success && <AlertMessage type="success" message={success} />}
 
       <AuthInput
         label="E-mail"
@@ -44,21 +46,13 @@ export default function LoginPage() {
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      <PasswordInput
-        value={password}
-        onChange={setPassword}
-      />
-
       <AuthButton loading={loading} onClick={handleSubmit}>
-        ENTRAR
+        ENVIAR LINK
       </AuthButton>
 
-      <div className="text-center mt-6 space-y-3">
-        <AuthLink href="/forgot-password">
-          Esqueceu sua senha?
-        </AuthLink>
-        <AuthLink href="/register">
-          Criar Conta
+      <div className="text-center mt-6">
+        <AuthLink href="/login">
+          Voltar para o login
         </AuthLink>
       </div>
 
