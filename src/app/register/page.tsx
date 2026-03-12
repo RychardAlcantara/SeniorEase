@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Box } from "@mui/material"
+import { PublicRoute } from "@/src/presentation/components/PublicRoute"
 import { AuthCard } from "@/src/presentation/components/auth/AuthCard"
 import { AuthInput } from "@/src/presentation/components/auth/AuthInput"
 import { PasswordInput } from "@/src/presentation/components/auth/PasswordInput"
@@ -34,48 +36,45 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthCard title="Criar Conta" subtitle="Preencha seus dados para começar">
+    <PublicRoute>
+      <AuthCard title="Criar Conta" subtitle="Preencha seus dados para começar">
 
-      {error && <AlertMessage type="error" message={error} />}
+        {error && <AlertMessage type="error" message={error} />}
 
-      <AuthInput
-        label="Nome completo"
-        type="text"
-        placeholder="Digite seu nome"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+        <AuthInput
+          label="Nome completo"
+          type="text"
+          placeholder="Digite seu nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <AuthInput
-        label="E-mail"
-        type="email"
-        placeholder="Digite seu e-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <AuthInput
+          label="E-mail"
+          type="email"
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <PasswordInput
-        value={password}
-        onChange={setPassword}
-      />
+        <PasswordInput value={password} onChange={setPassword} />
 
-      <PasswordInput
-        label="Confirmar senha"
-        placeholder="Confirme sua senha"
-        value={confirmPassword}
-        onChange={setConfirmPassword}
-      />
+        <PasswordInput
+          label="Confirmar senha"
+          placeholder="Confirme sua senha"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
 
-      <AuthButton loading={loading} onClick={handleSubmit}>
-        CRIAR CONTA
-      </AuthButton>
+        <AuthButton loading={loading} onClick={handleSubmit}>
+          CRIAR CONTA
+        </AuthButton>
 
-      <div className="text-center mt-6">
-        <AuthLink href="/login">
-          Já tem uma conta? Entrar
-        </AuthLink>
-      </div>
+        <Box mt={3}>
+          <AuthLink href="/login">Já tem uma conta? Entrar</AuthLink>
+        </Box>
 
-    </AuthCard>
+      </AuthCard>
+    </PublicRoute>
   )
 }

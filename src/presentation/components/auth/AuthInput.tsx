@@ -1,39 +1,42 @@
-"use client"
-
 import { InputHTMLAttributes, ReactNode } from "react"
+import { TextField, InputAdornment } from "@mui/material"
 
-interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface AuthInputProps {
   label: string
+  type?: string
+  placeholder?: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   error?: string
   rightElement?: ReactNode
 }
 
-export function AuthInput({ label, error, rightElement, className = "", ...props }: AuthInputProps) {
+export function AuthInput({
+  label,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  error,
+  rightElement,
+}: AuthInputProps) {
   return (
-    <div className="mb-5">
-      <label className="block text-gray-600 text-lg mb-2">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          className={`
-            w-full border rounded-lg p-3 text-lg
-            focus:outline-none focus:ring-2 focus:ring-blue-500
-            ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}
-            ${rightElement ? "pr-12" : ""}
-            ${className}
-          `}
-          {...props}
-        />
-        {rightElement && (
-          <div className="absolute right-3 top-3">
-            {rightElement}
-          </div>
-        )}
-      </div>
-      {error && (
-        <p className="text-red-500 text-sm mt-1">{error}</p>
-      )}
-    </div>
+    <TextField
+      fullWidth
+      label={label}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      error={!!error}
+      helperText={error}
+      variant="outlined"
+      sx={{ mb: 3 }}
+      InputProps={
+        rightElement
+          ? { endAdornment: <InputAdornment position="end">{rightElement}</InputAdornment> }
+          : undefined
+      }
+    />
   )
 }

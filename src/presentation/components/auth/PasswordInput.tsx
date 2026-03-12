@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Eye, EyeOff } from "lucide-react"
+import { IconButton } from "@mui/material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { AuthInput } from "./AuthInput"
 
 interface PasswordInputProps {
@@ -30,13 +31,9 @@ export function PasswordInput({
       onChange={(e) => onChange(e.target.value)}
       error={error}
       rightElement={
-        <button
-          type="button"
-          onClick={() => setShow((prev) => !prev)}
-          className="text-gray-400 hover:text-gray-600"
-        >
-          {show ? <EyeOff size={22} /> : <Eye size={22} />}
-        </button>
+        <IconButton onClick={() => setShow((prev) => !prev)} edge="end" size="small">
+          {show ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
       }
     />
   )

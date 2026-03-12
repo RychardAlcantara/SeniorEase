@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { Box } from "@mui/material"
+import { PublicRoute } from "@/src/presentation/components/PublicRoute"
 import { AuthCard } from "@/src/presentation/components/auth/AuthCard"
 import { AuthInput } from "@/src/presentation/components/auth/AuthInput"
 import { AuthButton } from "@/src/presentation/components/auth/AuthButton"
@@ -30,32 +32,32 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <AuthCard
-      title="Recuperar Senha"
-      subtitle="Informe seu e-mail para receber o link de recuperação"
-    >
+    <PublicRoute>
+      <AuthCard
+        title="Recuperar Senha"
+        subtitle="Informe seu e-mail para receber o link de recuperação"
+      >
 
-      {error && <AlertMessage type="error" message={error} />}
-      {success && <AlertMessage type="success" message={success} />}
+        {error && <AlertMessage type="error" message={error} />}
+        {success && <AlertMessage type="success" message={success} />}
 
-      <AuthInput
-        label="E-mail"
-        type="email"
-        placeholder="Digite seu e-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <AuthInput
+          label="E-mail"
+          type="email"
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <AuthButton loading={loading} onClick={handleSubmit}>
-        ENVIAR LINK
-      </AuthButton>
+        <AuthButton loading={loading} onClick={handleSubmit}>
+          ENVIAR LINK
+        </AuthButton>
 
-      <div className="text-center mt-6">
-        <AuthLink href="/login">
-          Voltar para o login
-        </AuthLink>
-      </div>
+        <Box mt={3}>
+          <AuthLink href="/login">Voltar para o login</AuthLink>
+        </Box>
 
-    </AuthCard>
+      </AuthCard>
+    </PublicRoute>
   )
 }
