@@ -12,10 +12,12 @@ import EditTaskModal from "../tasks/EditTaskModal";
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState({
     id: "",
     title: "",
-    status: "",
+    createdAt: new Date(),
+    completed: false,
   });
 
   return (
@@ -33,7 +35,11 @@ export default function Dashboard() {
         }}
       >
         <Grid {...{ item: true, width: "60%" }}>
-          <TaskList setEditOpen={setEditOpen} setTask={setSelectedTask} />
+          <TaskList
+            setEditOpen={setEditOpen}
+            setSelectedTask={setSelectedTask}
+            tasks={tasks}
+          />
 
           <CreateTaskButton onClick={() => setOpen(!open)} />
         </Grid>

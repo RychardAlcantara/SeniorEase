@@ -1,7 +1,7 @@
-import { Task } from "./task";
+import Task from "./Task";
 
 export default interface TaskItemProps {
   task: Task;
   setOpen: (open: boolean) => void;
-  setTask: (task: Task) => void;
+  setSelectedTask: (task: Task) => void;
 }

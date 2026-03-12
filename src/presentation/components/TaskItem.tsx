@@ -1,14 +1,19 @@
 "use client";
 
-import TaskItemProps from "@/src/interface/taskItem";
+import TaskItemProps from "@/src/domain/entities/taskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 
-export default function TaskItem({ task, setOpen, setTask }: TaskItemProps) {
+export default function TaskItem({
+  task,
+  setOpen,
+  setSelectedTask,
+}: TaskItemProps) {
   function editItem() {
-    setTask({
+    setSelectedTask({
       id: task.id,
       title: task.title,
-      status: task.status,
+      createdAt: task.createdAt,
+      completed: task.completed,
     });
     setOpen(true);
   }

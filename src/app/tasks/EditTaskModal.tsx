@@ -1,4 +1,4 @@
-import EditTaskModalProps from "@/src/interface/editModalProps";
+import EditTaskModalProps from "@/src/domain/entities/editModalProps";
 import Modal from "@/src/presentation/components/Modal";
 
 export default function EditTaskModal({
