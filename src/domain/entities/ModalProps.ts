@@ -1,8 +1,11 @@
+import Task from "./Task";
+
 export default interface ModalProps {
-  title: string;
+  type: "create" | "edit";
   open: boolean;
   onClose: () => void;
-  onSave: () => void;
-  value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  tasks?: Task[];
+  setTasks?: (tasks: Task[]) => void;
+  selectedTask?: Task;
+  setSelectedTask?: (tasks: Task[]) => void;
 }

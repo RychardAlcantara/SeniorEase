@@ -5,17 +5,18 @@ import TaskList from "@/src/presentation/components/TaskList";
 import HistoryList from "@/src/presentation/components/HistoryList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import { useState } from "react";
-import CreateTaskModal from "../tasks/CreateTaskModal";
 import { Box, Grid } from "@mui/material";
-import EditTaskModal from "../tasks/EditTaskModal";
+import Task from "@/src/domain/entities/Task";
+import Modal from "@/src/presentation/components/Modal";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [tasks, setTasks] = useState([]);
-  const [selectedTask, setSelectedTask] = useState({
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [selectedTask, setSelectedTask] = useState<Task>({
     id: "",
     title: "",
+    notes: "",
     createdAt: new Date(),
     completed: false,
   });
@@ -48,17 +49,25 @@ export default function Dashboard() {
 
         {open && (
           <Grid {...{ item: true, width: "40%" }}>
-            <CreateTaskModal open={open} onClose={() => setOpen(!open)} />
+            <Modal
+              type="create"
+              open={open}
+              onClose={() => setOpen(!open)}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
           </Grid>
         )}
 
         {editOpen && (
           <Grid {...{ item: true, width: "40%" }}>
-            <EditTaskModal
+            <Modal
+              type="edit"
               open={editOpen}
               onClose={() => setEditOpen(!editOpen)}
               selectedTask={selectedTask}
-              setSelectedTask={setSelectedTask}
+              tasks={tasks}
+              setTasks={setTasks}
             />
           </Grid>
         )}

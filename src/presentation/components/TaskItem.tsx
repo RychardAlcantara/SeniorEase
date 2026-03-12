@@ -12,6 +12,7 @@ export default function TaskItem({
     setSelectedTask({
       id: task.id,
       title: task.title,
+      notes: task.notes,
       createdAt: task.createdAt,
       completed: task.completed,
     });
@@ -46,13 +47,22 @@ export default function TaskItem({
             ✔
           </Typography>
 
-          <Typography
-            variant="body1"
-            sx={{ fontSize: "1.125rem", color: "grey.800" }}
-            noWrap
-          >
-            {task.title}
-          </Typography>
+          <Stack direction="column" alignItems="flex-start">
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "1.125rem", color: "grey.800" }}
+              noWrap
+            >
+              {task.title}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "1rem", color: "grey.700" }}
+              noWrap
+            >
+              {task.notes}
+            </Typography>
+          </Stack>
         </Stack>
 
         <Stack direction="row" spacing={1} flexShrink={0}>
