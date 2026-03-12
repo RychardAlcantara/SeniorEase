@@ -1,4 +1,4 @@
-import ModalProps from "@/src/domain/entities/modalProps";
+import ModalProps from "@/src/domain/entities/ModalProps";
 import {
   Dialog,
   DialogTitle,

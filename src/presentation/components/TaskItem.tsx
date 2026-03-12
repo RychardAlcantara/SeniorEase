@@ -1,6 +1,6 @@
 "use client";
 
-import TaskItemProps from "@/src/domain/entities/taskItem";
+import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 
 export default function TaskItem({
