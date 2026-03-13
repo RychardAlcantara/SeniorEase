@@ -1,17 +1,16 @@
 "use client";
 
-import { Home, ListTodo, Settings, User } from "lucide-react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { Home, ListTodo, Settings, User, LogOut } from "lucide-react"
 import Link from "next/link";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import { useAuth } from "@/src/infrastructure/AuthContext"
+import { signOutUseCase } from "@/src/infrastructure/container"
+import { useRouter } from "next/navigation"
+import { AppBar, Toolbar, Typography, Button, Box, Container, Stack } from "@mui/material"
 
 export default function Navbar() {
+  const router = useRouter()
+  const { user } = useAuth()
   const { altoContraste } = useContraste();
   const links = [
     { title: "Início", href: "/dashboard", icon: <Home size={20} /> },
@@ -19,6 +18,12 @@ export default function Navbar() {
     { title: "Configurações", href: "/settings", icon: <Settings size={20} /> },
     { title: "Meu Perfil", href: "#", icon: <User size={20} /> },
   ];
+
+  async function handleSignOut() {
+    await signOutUseCase.execute()
+    router.replace("/login")
+  }
+
   return (
     <AppBar
       position="static"
@@ -83,9 +88,23 @@ export default function Navbar() {
             >
               Precisa de ajuda?
             </Button>
+            
+            <Button
+              variant="contained"
+              onClick={handleSignOut}
+              startIcon={<LogOut size={18} />}
+              sx={{
+                bgcolor: "white",
+                color: "#1565c0",
+                fontWeight: "bold",
+                "&:hover": { bgcolor: "#e3f2fd" },
+              }}
+            >
+              Sair
+            </Button>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  );
+  )
 }

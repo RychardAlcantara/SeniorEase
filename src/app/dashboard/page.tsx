@@ -1,5 +1,7 @@
 "use client"
 
+import { Box, Container, Grid, Typography } from "@mui/material"
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 import Navbar from "@/src/presentation/components/Navbar"
 import TaskList from "@/src/presentation/components/TaskList"
 import HistoryList from "@/src/presentation/components/HistoryList"
@@ -30,7 +32,6 @@ function DashboardContent() {
   });
 
   return (
-
     <Box sx={{ minHeight: "100vh", bgcolor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-page)", color: altoContraste ? "var(--color-hc-text)" : "inherit", transition: "all 0.3s ease" }}>
 
       <Navbar />
@@ -108,7 +109,6 @@ function DashboardContent() {
       </Container>
 
     </Box>
-
   )
 }
 
