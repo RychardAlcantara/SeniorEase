@@ -1,81 +1,85 @@
 "use client";
 
-import { Home, ListTodo, Settings, User } from "lucide-react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { useRouter } from "next/navigation"
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
+import { Home, ListTodo, Settings, User, LogOut } from "lucide-react"
+import { useAuth } from "@/src/infrastructure/AuthContext"
+import { signOutUseCase } from "@/src/infrastructure/container"
 
 export default function Navbar() {
-  const links = [
-    { title: "Início", href: "#" },
-    { title: "Tarefas", href: "#" },
-    { title: "Configurações", href: "#" },
-    { title: "Meu Perfil", href: "#" },
-  ];
+  const router = useRouter()
+  const { user } = useAuth()
+
+  async function handleSignOut() {
+    await signOutUseCase.execute()
+    router.replace("/login")
+  }
+
   return (
     <AppBar
       position="static"
       sx={{
-        backgroundImage: "linear-gradient(to right, #1e40af, #2563eb)", // from-blue-600 to-blue-500
-        boxShadow: 3,
+        background: "linear-gradient(to right, #1565c0, #1976d2)",
+        boxShadow: 2,
       }}
     >
-      <Container maxWidth="lg">
-        <Toolbar
-          disableGutters
+      <Toolbar sx={{ maxWidth: "1152px", width: "100%", mx: "auto", px: 2, gap: 2 }}>
+
+        {/* Logo */}
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          fontStyle="italic"
+          sx={{ flexGrow: 0, mr: 4 }}
+        >
+          SeniorEase
+        </Typography>
+
+        {/* Nav links */}
+        <Box display="flex" gap={1} flexGrow={1}>
+          <Button color="inherit" startIcon={<Home size={18} />} sx={{ fontSize: "1rem" }}>
+            Início
+          </Button>
+          <Button color="inherit" startIcon={<ListTodo size={18} />} sx={{ fontSize: "1rem" }}>
+            Tarefas
+          </Button>
+          <Button color="inherit" startIcon={<Settings size={18} />} sx={{ fontSize: "1rem" }}>
+            Configurações
+          </Button>
+          <Button color="inherit" startIcon={<User size={18} />} sx={{ fontSize: "1rem" }}>
+            Meu Perfil
+          </Button>
+        </Box>
+
+        {/* Ajuda */}
+        <Button
+          variant="outlined"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            p: 1,
+            color: "white",
+            borderColor: "white",
+            fontWeight: "bold",
+            "&:hover": { borderColor: "white", bgcolor: "rgba(255,255,255,0.1)" },
           }}
         >
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: 700, fontStyle: "italic", color: "#fff" }}
-          >
-            SeniorEase
-          </Typography>
+          Precisa de ajuda?
+        </Button>
 
-          {/* Navegação */}
-          <Stack direction="row" spacing={4} alignItems="center">
-            {links.map((link) => (
-              <Button
-                key={link.title}
-                color="inherit"
-                sx={{ textTransform: "none", "&:hover": { opacity: 0.8 } }}
-                startIcon={<ListTodo size={20} />}
-              >
-                {link.title}
-              </Button>
-            ))}
-          </Stack>
+        {/* Sair */}
+        <Button
+          variant="contained"
+          onClick={handleSignOut}
+          startIcon={<LogOut size={18} />}
+          sx={{
+            bgcolor: "white",
+            color: "#1565c0",
+            fontWeight: "bold",
+            "&:hover": { bgcolor: "#e3f2fd" },
+          }}
+        >
+          Sair
+        </Button>
 
-          <Box>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#fff",
-                color: "#2563eb",
-                textTransform: "none",
-                fontWeight: 600,
-                borderRadius: 2,
-                px: 2,
-                py: 1,
-                "&:hover": {
-                  backgroundColor: "#f1f5f9",
-                },
-              }}
-            >
-              Precisa de ajuda?
-            </Button>
-          </Box>
-        </Toolbar>
-      </Container>
+      </Toolbar>
     </AppBar>
-  );
+  )
 }

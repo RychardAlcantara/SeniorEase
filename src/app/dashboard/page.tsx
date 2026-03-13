@@ -1,37 +1,38 @@
 "use client"
 
+import { Box, Container, Grid, Typography } from "@mui/material"
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 import Navbar from "@/src/presentation/components/Navbar"
 import TaskList from "@/src/presentation/components/TaskList"
 import HistoryList from "@/src/presentation/components/HistoryList"
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton"
 
 export default function Dashboard() {
-
   return (
+    <PrivateRoute>
+      <Box minHeight="100vh" bgcolor="grey.100">
 
-    <div className="min-h-screen bg-gray-100">
+        <Navbar />
 
-      <Navbar/>
+        <Container maxWidth="lg" sx={{ py: 6 }}>
+          <Grid container spacing={3}>
 
-      <main className="max-w-6xl mx-auto p-8 grid grid-cols-3 gap-6">
+            <Grid item xs={12} md={8}>
+              <Typography variant="h4" fontWeight="bold" color="text.primary" mb={4}>
+                Minhas Tarefas
+              </Typography>
+              <TaskList />
+              <CreateTaskButton />
+            </Grid>
 
-        <div className="col-span-2">
+            <Grid item xs={12} md={4}>
+              <HistoryList />
+            </Grid>
 
-          <h1 className="text-3xl font-bold text-gray-700 mb-6">
-            Minhas Tarefas
-          </h1>
+          </Grid>
+        </Container>
 
-          <TaskList/>
-
-          <CreateTaskButton/>
-
-        </div>
-
-        <HistoryList/>
-
-      </main>
-
-    </div>
-
+      </Box>
+    </PrivateRoute>
   )
 }
