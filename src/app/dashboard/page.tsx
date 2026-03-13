@@ -1,37 +1,72 @@
-"use client"
+"use client";
 
-import Navbar from "@/src/presentation/components/Navbar"
-import TaskList from "@/src/presentation/components/TaskList"
-import HistoryList from "@/src/presentation/components/HistoryList"
-import CreateTaskButton from "@/src/presentation/components/CreateTaskButton"
+import Navbar from "@/src/presentation/components/Navbar";
+import TaskList from "@/src/presentation/components/TaskList";
+import HistoryList from "@/src/presentation/components/HistoryList";
+import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
+import { useState } from "react";
+import { Box, Grid } from "@mui/material";
+import Task from "@/src/domain/entities/Task";
+import Modal from "@/src/presentation/components/Modal";
 
 export default function Dashboard() {
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   return (
+    <Box sx={{ minHeight: "100vh", backgroundColor: "grey.100" }}>
+      <Navbar />
 
-    <div className="min-h-screen bg-gray-100">
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          padding: 3 /* ~ p-6 */,
+        }}
+      >
+        <Grid {...{ item: true, width: "60%" }}>
+          <TaskList
+            setEditOpen={setEditOpen}
+            setTasks={setTasks}
+            tasks={tasks.filter((t) => !t.completed)}
+          />
 
-      <Navbar/>
+          <CreateTaskButton onClick={() => setOpen(!open)} />
+        </Grid>
 
-      <main className="max-w-6xl mx-auto p-8 grid grid-cols-3 gap-6">
+        <HistoryList tasks={tasks} />
 
-        <div className="col-span-2">
+        {open && (
+          <Grid {...{ item: true, width: "40%" }}>
+            <Modal
+              type="create"
+              open={open}
+              onClose={() => setOpen(!open)}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
+          </Grid>
+        )}
 
-          <h1 className="text-3xl font-bold text-gray-700 mb-6">
-            Minhas Tarefas
-          </h1>
-
-          <TaskList/>
-
-          <CreateTaskButton/>
-
-        </div>
-
-        <HistoryList/>
-
-      </main>
-
-    </div>
-
-  )
+        {editOpen && (
+          <Grid {...{ item: true, width: "40%" }}>
+            <Modal
+              type="edit"
+              open={editOpen}
+              onClose={() => setEditOpen(!editOpen)}
+              selectedTask={tasks.find(
+                (t) => t.id === tasks[tasks.length - 1].id,
+              )}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+  );
 }
