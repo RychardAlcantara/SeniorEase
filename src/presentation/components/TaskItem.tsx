@@ -25,17 +25,13 @@ export default function TaskItem({
   }
 
   function concludeItem() {
-    setTasks([
-      ...tasks.filter((t) => t.id !== task.id),
-      {
-        id: task.id,
-        title: task.title,
-        notes: task.notes,
-        createdAt: task.createdAt,
-        concludedAt: new Date(),
-        completed: true,
-      },
-    ]);
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === task.id
+          ? { ...t, completed: true, concludedAt: new Date() }
+          : t,
+      ),
+    );
   }
 
   return (

@@ -13,14 +13,6 @@ export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task>({
-    id: "",
-    title: "",
-    notes: "",
-    createdAt: new Date(),
-    completed: false,
-    concludedAt: null,
-  });
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "grey.100" }}>
@@ -46,7 +38,7 @@ export default function Dashboard() {
           <CreateTaskButton onClick={() => setOpen(!open)} />
         </Grid>
 
-        <HistoryList tasks={tasks} setTasks={setTasks} />
+        <HistoryList tasks={tasks} />
 
         {open && (
           <Grid {...{ item: true, width: "40%" }}>
@@ -66,7 +58,9 @@ export default function Dashboard() {
               type="edit"
               open={editOpen}
               onClose={() => setEditOpen(!editOpen)}
-              selectedTask={selectedTask}
+              selectedTask={tasks.find(
+                (t) => t.id === tasks[tasks.length - 1].id,
+              )}
               tasks={tasks}
               setTasks={setTasks}
             />

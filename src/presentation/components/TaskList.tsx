@@ -3,6 +3,7 @@
 import { Card, CardContent, Typography, Stack } from "@mui/material";
 import TaskItem from "./TaskItem";
 import Task from "@/src/domain/entities/Task";
+import { Dispatch, SetStateAction } from "react";
 
 export default function TaskList({
   setEditOpen,
@@ -10,7 +11,7 @@ export default function TaskList({
   tasks,
 }: {
   setEditOpen: (open: boolean) => void;
-  setTasks: (tasks: Task[]) => void;
+  setTasks: Dispatch<SetStateAction<Task[]>>;
   tasks: Task[];
 }) {
   return (

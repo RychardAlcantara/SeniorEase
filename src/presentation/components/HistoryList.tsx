@@ -1,15 +1,9 @@
 "use client";
 
-import { Card, CardContent, Typography, Stack } from "@mui/material";
+import { Card, CardContent, Typography, Stack, Tooltip } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
 
-export default function HistoryList({
-  tasks,
-  setTasks,
-}: {
-  tasks: Task[];
-  setTasks: (tasks: Task[]) => void;
-}) {
+export default function HistoryList({ tasks }: { tasks: Task[] }) {
   const history = tasks.filter((t) => t.completed);
 
   return (
@@ -39,22 +33,27 @@ export default function HistoryList({
               >
                 ✔
               </Typography>
-              <Typography variant="body2" sx={{ color: "grey.600" }}>
-                {item.title} — concluído{" "}
-                {item.concludedAt
-                  ? new Date(item.concludedAt).getDate().toString() ===
-                    new Date().getDate().toString()
-                    ? "hoje"
-                    : new Date(item.concludedAt).getDate().toString() ===
-                        (new Date().getDate() - 1).toString()
-                      ? "ontem"
-                      : new Date(item.concludedAt).toLocaleDateString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "2-digit",
-                        })
-                  : null}
-              </Typography>
+              <Tooltip title={item.notes} placement="top" arrow>
+                <Typography variant="body2" sx={{ color: "grey.600" }}>
+                  {item.title} — concluído{" "}
+                  {item.concludedAt
+                    ? new Date(item.concludedAt).getDate().toString() ===
+                      new Date().getDate().toString()
+                      ? "hoje"
+                      : new Date(item.concludedAt).getDate().toString() ===
+                          (new Date().getDate() - 1).toString()
+                        ? "ontem"
+                        : new Date(item.concludedAt).toLocaleDateString(
+                            "pt-BR",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "2-digit",
+                            },
+                          )
+                    : null}
+                </Typography>
+              </Tooltip>
             </Stack>
           ))}
         </Stack>
