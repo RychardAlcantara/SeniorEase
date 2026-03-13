@@ -5,9 +5,10 @@ import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
 interface Props {
   title: string;
+  showEditButton?: boolean;
 }
 
-export default function TaskItem({ title }: Props) {
+export default function TaskItem({ title, showEditButton = true }: Props) {
   const { altoContraste } = useContraste();
   return (
     <Box
@@ -61,19 +62,21 @@ export default function TaskItem({ title }: Props) {
             Concluir
           </Button>
 
-          <Button
-            variant="contained"
-            size="small"
-            sx={{
-              textTransform: "none",
-              borderRadius: 1,
-              backgroundColor: altoContraste ? "var(--color-hc-accent)" : "primary.main",
-              color: altoContraste ? "var(--color-hc-bg)" : undefined,
-              "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "primary.dark" },
-            }}
-          >
-            Editar
-          </Button>
+          {showEditButton && (
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                textTransform: "none",
+                borderRadius: 1,
+                backgroundColor: altoContraste ? "var(--color-hc-accent)" : "primary.main",
+                color: altoContraste ? "var(--color-hc-bg)" : undefined,
+                "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "primary.dark" },
+              }}
+            >
+              Editar
+            </Button>
+          )}
         </Stack>
       </Stack>
 

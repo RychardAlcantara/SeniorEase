@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, Stack } from "@mui/material";
 import TaskItem from "./TaskItem";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
-export default function TaskList() {
+export default function TaskList({ showEditButton = true }: { showEditButton?: boolean }) {
   const { altoContraste } = useContraste();
   const tasks = [
     "Digite a tarefa...",
@@ -29,7 +29,7 @@ export default function TaskList() {
 
         <Stack spacing={0}>
           {tasks.map((task, index) => (
-            <TaskItem key={index} title={task} />
+            <TaskItem key={index} title={task} showEditButton={showEditButton} />
           ))}
         </Stack>
       </CardContent>

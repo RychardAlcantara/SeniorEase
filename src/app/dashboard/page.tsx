@@ -21,6 +21,7 @@ function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
   const { config, salvarConfig } = useConfig();
   const tarefasHoje: number = 3;
+  const simplificado = config.modoVisualizacao === "simplificada";
 
   const dataHoje = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
@@ -67,36 +68,40 @@ function DashboardContent() {
 
         {/* Card Próxima Tarefa + Estatística Semanal */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: simplificado ? 12 : 8 }}>
             <NextTaskCard title="Tomar medicamento" time="08:00" date="Hoje" />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <WeeklyStatsCard concluidas={5} pendentes={3} />
-          </Grid>
+          {!simplificado && (
+            <Grid size={{ xs: 12, md: 4 }}>
+              <WeeklyStatsCard concluidas={5} pendentes={3} />
+            </Grid>
+          )}
         </Grid>
 
         <Grid container spacing={3}>
 
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: simplificado ? 12 : 8 }}>
 
             <Typography variant="h4" sx={{ fontWeight: 700, color: altoContraste ? "var(--color-hc-text)" : "text.secondary", mb: 3 }}>
               Minhas Tarefas
             </Typography>
 
-            <TaskList />
+            <TaskList showEditButton={!simplificado} />
 
             <CreateTaskButton />
 
           </Grid>
 
-          <Grid size={{ xs: 12, md: 4 }}>
+          {!simplificado && (
+            <Grid size={{ xs: 12, md: 4 }}>
 
-            <Typography variant="h4" sx={{ fontWeight: 700, color: altoContraste ? "var(--color-hc-text)" : "text.secondary", mb: 3 }}>
-              Histórico
-            </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 700, color: altoContraste ? "var(--color-hc-text)" : "text.secondary", mb: 3 }}>
+                Histórico
+              </Typography>
 
-            <HistoryList />
-          </Grid>
+              <HistoryList />
+            </Grid>
+          )}
 
         </Grid>
 

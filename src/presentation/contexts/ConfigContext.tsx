@@ -19,7 +19,7 @@ const defaultConfig: AppConfig = {
   fontSize: 1,
   espacamento: "normal",
   altoContraste: false,
-  modoVisualizacao: "simplificada",
+  modoVisualizacao: "avancada",
 };
 
 const STORAGE_KEY = "seniorease-config";
