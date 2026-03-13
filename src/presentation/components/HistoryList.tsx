@@ -1,10 +1,12 @@
 "use client";
 
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material";
+import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 // Opcional: usar um ícone do MUI em vez do "✔"
 // import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 export default function HistoryList() {
+  const { altoContraste } = useContraste();
   const history = [
     "Participar da reunião — concluído hoje",
     "Enviar documento — concluído ontem",
@@ -16,11 +18,13 @@ export default function HistoryList() {
       sx={{
         borderRadius: 3,
         boxShadow: 3,
-        backgroundColor: "#fff",
+        backgroundColor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-card)",
+        border: altoContraste ? "2px solid var(--color-hc-accent)" : "none",
+        transition: "all 0.3s ease",
       }}
     >
       <CardContent sx={{ p: 3 /* ~ p-6 */ }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: altoContraste ? "var(--color-hc-text)" : "inherit" }}>
           Histórico de Tarefas
         </Typography>
 
@@ -34,11 +38,11 @@ export default function HistoryList() {
             >
               <Typography
                 component="span"
-                sx={{ color: "primary.main", fontWeight: 700 }}
+                sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-primary)", fontWeight: 700 }}
               >
                 ✔
               </Typography>
-              <Typography variant="body2" sx={{ color: "grey.600" }}>
+              <Typography variant="body2" sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)" }}>
                 {item}
               </Typography>
             </Stack>

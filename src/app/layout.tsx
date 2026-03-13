@@ -1,6 +1,7 @@
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { AuthProvider } from "@/src/infrastructure/AuthContext";
+import Providers from "./providers"
 
 export const metadata = {
   title: "SeniorEase",
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider>
           <AuthProvider>
-            {children}
+            <Providers>
+              {children}
+            </Providers>
           </AuthProvider>
         </AppRouterCacheProvider>
       </body>

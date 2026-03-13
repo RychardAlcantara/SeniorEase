@@ -19,7 +19,7 @@ export function AuthButton({ loading, onClick, children }: AuthButtonProps) {
         fontSize: "1.1rem",
         fontWeight: "bold",
         borderRadius: 2,
-        background: "linear-gradient(to right, #1565c0, #0d47a1)",
+        background: "var(--gradient-login)",
         "&:hover": { opacity: 0.9 },
       }}
       startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}

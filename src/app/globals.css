@@ -1,2 +1,41 @@
 @import "tailwindcss";
 
+:root {
+  /* Primárias */
+  --color-primary-dark: #1e40af;
+  --color-primary: #2563eb;
+  --color-primary-light: #3a7bd5;
+  --color-primary-accent: #00b0ff;
+
+  /* hover das primárias */
+  --color-primary-dark-hover: #1c3a9e;
+  --color-primary-hover: #3670c7;
+  --color-primary-accent-hover: #00a3f0;
+
+  /* Fundos */
+  --color-bg-page: #f3f4f6;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f1f5f9;
+
+  /* Textos */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  --color-text-light: #9ca3af;
+  --color-text-white: #ffffff;
+
+  /* Bordas */
+  --color-border: #d1d5db;
+  --color-border-focus: #2563eb;
+
+  /* Alto Contraste */
+  --color-hc-bg: #000000;
+  --color-hc-text: #ffffff;
+  --color-hc-accent: #1aebff;
+
+  /* Gradientes (Navbar / Botões) */
+  --gradient-navbar: linear-gradient(to right, var(--color-primary-dark), var(--color-primary));
+  --gradient-button: linear-gradient(to right, var(--color-primary-accent), var(--color-primary-light));
+  --gradient-button-hover: linear-gradient(to right, var(--color-primary-accent-hover), var(--color-primary-hover));
+  --gradient-login: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
+}

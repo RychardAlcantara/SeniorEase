@@ -14,7 +14,7 @@ export function AuthLink({ href, children }: AuthLinkProps) {
       display="block"
       textAlign="center"
       underline="hover"
-      color="primary"
+      sx={{ color: "var(--color-primary)" }}
     >
       {children}
     </Link>
