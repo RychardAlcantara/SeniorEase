@@ -5,7 +5,8 @@ import TaskList from "@/src/presentation/components/TaskList"
 import HistoryList from "@/src/presentation/components/HistoryList"
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton"
 import NextTaskCard from "@/src/presentation/components/NextTaskCard"
-import { ContrasteProvider, useContraste } from "@/src/presentation/contexts/ContrasteContext"
+import { useContraste } from "@/src/presentation/contexts/ContrasteContext"
+import { useConfig } from "@/src/presentation/contexts/ConfigContext"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
@@ -17,6 +18,7 @@ import Stack from "@mui/material/Stack"
 function DashboardContent() {
 
   const { altoContraste, setAltoContraste } = useContraste();
+  const { config, salvarConfig } = useConfig();
   const tarefasHoje: number = 3;
 
   const dataHoje = new Date().toLocaleDateString("pt-BR", {
@@ -42,10 +44,14 @@ function DashboardContent() {
             control={
               <Switch
                 checked={altoContraste}
-                onChange={(e) => setAltoContraste(e.target.checked)}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  setAltoContraste(checked)
+                  salvarConfig({ ...config, altoContraste: checked })
+                }}
                 sx={{
-                  "& .MuiSwitch-switchBase.Mui-checked": { color: "var(--color-hc-accent)" },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: "var(--color-hc-accent)" },
+                  "& .MuiSwitch-switchBase.Mui-checked": { color: "var(--color-hc-text)" },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: "var(--color-hc-text)" },
                 }}
               />
             }
@@ -95,8 +101,6 @@ function DashboardContent() {
 
 export default function Dashboard() {
   return (
-    <ContrasteProvider>
       <DashboardContent />
-    </ContrasteProvider>
   );
 }

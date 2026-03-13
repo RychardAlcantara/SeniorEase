@@ -1,5 +1,6 @@
 import "./globals.css"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
+import Providers from "./providers"
 
 export const metadata = {
   title: "SeniorEase",
@@ -15,7 +16,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          {children}
+          <Providers>
+            {children}
+          </Providers>
         </AppRouterCacheProvider>
       </body>
     </html>

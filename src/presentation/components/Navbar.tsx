@@ -8,14 +8,15 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Link from "next/link";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
 export default function Navbar() {
   const { altoContraste } = useContraste();
   const links = [
-    { title: "Início", href: "#", icon: <Home size={20} /> },
-    { title: "Tarefas", href: "#", icon: <ListTodo size={20} /> },
-    { title: "Configurações", href: "#", icon: <Settings size={20} /> },
+    { title: "Início", href: "/dashboard", icon: <Home size={20} /> },
+    { title: "Tarefas", href: "/tasks", icon: <ListTodo size={20} /> },
+    { title: "Configurações", href: "/settings", icon: <Settings size={20} /> },
     { title: "Meu Perfil", href: "#", icon: <User size={20} /> },
   ];
   return (
@@ -51,6 +52,8 @@ export default function Navbar() {
             {links.map((link) => (
               <Button
                 key={link.title}
+                component={Link}
+                href={link.href}
                 color="inherit"
                 sx={{ textTransform: "none", color: altoContraste ? "var(--color-hc-text)" : "inherit", "&:hover": { opacity: 0.8 } }}
                 startIcon={link.icon}

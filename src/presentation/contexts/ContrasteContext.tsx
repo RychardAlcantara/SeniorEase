@@ -13,7 +13,22 @@ const ContrasteContext = createContext<ContrasteContextType>({
 });
 
 export function ContrasteProvider({ children }: { children: ReactNode }) {
-  const [altoContraste, setAltoContraste] = useState(false);
+  const [altoContraste, setAltoContraste] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("seniorease-config");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.altoContraste !== undefined) {
+            return parsed.altoContraste;
+          }
+        }
+      } catch {
+        // ignora
+      }
+    }
+    return false;
+  });
 
   return (
     <ContrasteContext.Provider value={{ altoContraste, setAltoContraste }}>
