@@ -22,7 +22,7 @@ export default function NextTaskCard({ title, time, date }: NextTaskCardProps) {
 			sx={{
 				borderRadius: 3,
 				boxShadow: 3,
-				mb: 3,
+				height: "100%",
 				background: altoContraste
 					? "var(--color-hc-bg)"
 					: "linear-gradient(135deg, var(--color-primary), var(--color-primary-light))",
@@ -47,12 +47,14 @@ export default function NextTaskCard({ title, time, date }: NextTaskCardProps) {
 						<Typography variant="h5" sx={{ fontWeight: 700, mt: 0.5 }}>
 							{title}
 						</Typography>
-						<Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+						<Stack direction="column" spacing={1} sx={{ mt: 1.5, alignItems: "flex-start" }}>
 							<Chip
-								icon={<Clock size={16} color={altoContraste ? "var(--color-hc-accent)" : "var(--color-text-white)"} />}
+								icon={<Clock size={14} color={altoContraste ? "var(--color-hc-accent)" : "var(--color-text-white)"} />}
 								label={time}
 								size="small"
 								sx={{
+									height: 26,
+									fontSize: "0.75rem",
 									bgcolor: altoContraste ? "rgba(26,235,255,0.2)" : "rgba(255,255,255,0.2)",
 									color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-white)",
 									fontWeight: 600,
@@ -60,10 +62,12 @@ export default function NextTaskCard({ title, time, date }: NextTaskCardProps) {
 								}}
 							/>
 							<Chip
-								icon={<CalendarDays size={16} color={altoContraste ? "var(--color-hc-accent)" : "var(--color-text-white)"} />}
+								icon={<CalendarDays size={14} color={altoContraste ? "var(--color-hc-accent)" : "var(--color-text-white)"} />}
 								label={date}
 								size="small"
 								sx={{
+									height: 26,
+									fontSize: "0.75rem",
 									bgcolor: altoContraste ? "rgba(26,235,255,0.2)" : "rgba(255,255,255,0.2)",
 									color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-white)",
 									fontWeight: 600,

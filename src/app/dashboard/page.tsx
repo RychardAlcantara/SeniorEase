@@ -5,6 +5,7 @@ import TaskList from "@/src/presentation/components/TaskList"
 import HistoryList from "@/src/presentation/components/HistoryList"
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton"
 import NextTaskCard from "@/src/presentation/components/NextTaskCard"
+import WeeklyStatsCard from "@/src/presentation/components/WeeklyStatsCard"
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext"
 import { useConfig } from "@/src/presentation/contexts/ConfigContext"
 import Box from "@mui/material/Box"
@@ -64,8 +65,15 @@ function DashboardContent() {
           Hoje é {dataHoje}. Você tem <strong>{tarefasHoje}</strong> {tarefasHoje === 1 ? "tarefa" : "tarefas"} para hoje.
         </Typography>
 
-        {/* Card Próxima Tarefa */}
-        <NextTaskCard title="Tomar medicamento" time="08:00" date="Hoje" />
+        {/* Card Próxima Tarefa + Estatística Semanal */}
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <NextTaskCard title="Tomar medicamento" time="08:00" date="Hoje" />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <WeeklyStatsCard concluidas={5} pendentes={3} />
+          </Grid>
+        </Grid>
 
         <Grid container spacing={3}>
 
