@@ -38,11 +38,11 @@ export default function HistoryList() {
             >
               <Typography
                 component="span"
-                sx={{ color: altoContraste ? "var(--color-hc-text)" : "primary.main", fontWeight: 700 }}
+                sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-primary)", fontWeight: 700 }}
               >
                 ✔
               </Typography>
-              <Typography variant="body2" sx={{ color: altoContraste ? "var(--color-hc-text)" : "grey.600" }}>
+              <Typography variant="body2" sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)" }}>
                 {item}
               </Typography>
             </Stack>

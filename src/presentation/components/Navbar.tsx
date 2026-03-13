@@ -68,7 +68,7 @@ export default function Navbar() {
             ))}
           </Stack>
 
-          <Box>
+          <Stack direction="row" spacing={1.5}>
             <Button
               component={Link}
               href="/help"
@@ -94,15 +94,21 @@ export default function Navbar() {
               onClick={handleSignOut}
               startIcon={<LogOut size={18} />}
               sx={{
-                bgcolor: "white",
-                color: "#1565c0",
-                fontWeight: "bold",
-                "&:hover": { bgcolor: "#e3f2fd" },
+                backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-bg-card)",
+                color: altoContraste ? "var(--color-hc-bg)" : "var(--color-primary)",
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: 2,
+                px: 2,
+                py: 1,
+                "&:hover": {
+                  backgroundColor: altoContraste ? "#15c4d9" : "var(--color-bg-hover)",
+                },
               }}
             >
               Sair
             </Button>
-          </Box>
+          </Stack>
         </Toolbar>
       </Container>
     </AppBar>

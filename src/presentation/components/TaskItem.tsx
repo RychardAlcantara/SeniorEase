@@ -33,14 +33,14 @@ export default function TaskItem({ title, showEditButton = true }: Props) {
         >
           <Typography
             component="span"
-            sx={{ color: altoContraste ? "var(--color-hc-text)" : "primary.main", fontWeight: 700 }}
+            sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-primary)", fontWeight: 700 }}
           >
             ✔
           </Typography>
 
           <Typography
             variant="body1"
-            sx={{ fontSize: "1.125rem", color: altoContraste ? "var(--color-hc-text)" : "grey.800" }}
+            sx={{ fontSize: "1.125rem", color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)" }}
             noWrap
           >
             {title}
@@ -69,9 +69,9 @@ export default function TaskItem({ title, showEditButton = true }: Props) {
               sx={{
                 textTransform: "none",
                 borderRadius: 1,
-                backgroundColor: altoContraste ? "var(--color-hc-accent)" : "primary.main",
-                color: altoContraste ? "var(--color-hc-bg)" : undefined,
-                "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "primary.dark" },
+                backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+                "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "var(--color-primary-dark)" },
               }}
             >
               Editar

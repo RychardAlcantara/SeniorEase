@@ -1,7 +1,5 @@
 "use client"
 
-import { Box, Container, Grid, Typography } from "@mui/material"
-import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 import Navbar from "@/src/presentation/components/Navbar"
 import TaskList from "@/src/presentation/components/TaskList"
 import HistoryList from "@/src/presentation/components/HistoryList"
