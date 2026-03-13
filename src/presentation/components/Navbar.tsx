@@ -65,6 +65,8 @@ export default function Navbar() {
 
           <Box>
             <Button
+              component={Link}
+              href="/help"
               variant="contained"
               sx={{
                 backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-bg-card)",
