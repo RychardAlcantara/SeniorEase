@@ -1,15 +1,16 @@
 "use client";
 
-import { Card, CardContent, Typography, Stack, Box } from "@mui/material";
-// Opcional: usar um ícone do MUI em vez do "✔"
-// import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { Card, CardContent, Typography, Stack } from "@mui/material";
+import Task from "@/src/domain/entities/Task";
 
-export default function HistoryList() {
-  const history = [
-    "Participar da reunião — concluído hoje",
-    "Enviar documento — concluído ontem",
-    "Tomar medicamento — concluído 10/05",
-  ];
+export default function HistoryList({
+  tasks,
+  setTasks,
+}: {
+  tasks: Task[];
+  setTasks: (tasks: Task[]) => void;
+}) {
+  const history = tasks.filter((t) => t.completed);
 
   return (
     <Card
@@ -39,7 +40,20 @@ export default function HistoryList() {
                 ✔
               </Typography>
               <Typography variant="body2" sx={{ color: "grey.600" }}>
-                {item}
+                {item.title} — concluído{" "}
+                {item.concludedAt
+                  ? new Date(item.concludedAt).getDate().toString() ===
+                    new Date().getDate().toString()
+                    ? "hoje"
+                    : new Date(item.concludedAt).getDate().toString() ===
+                        (new Date().getDate() - 1).toString()
+                      ? "ontem"
+                      : new Date(item.concludedAt).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                        })
+                  : null}
               </Typography>
             </Stack>
           ))}

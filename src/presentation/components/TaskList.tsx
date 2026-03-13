@@ -6,11 +6,11 @@ import Task from "@/src/domain/entities/Task";
 
 export default function TaskList({
   setEditOpen,
-  setSelectedTask,
+  setTasks,
   tasks,
 }: {
   setEditOpen: (open: boolean) => void;
-  setSelectedTask: (task: Task) => void;
+  setTasks: (tasks: Task[]) => void;
   tasks: Task[];
 }) {
   return (
@@ -32,7 +32,8 @@ export default function TaskList({
               key={index}
               task={task}
               setOpen={setEditOpen}
-              setSelectedTask={setSelectedTask}
+              setTasks={setTasks}
+              tasks={tasks}
             />
           ))}
         </Stack>

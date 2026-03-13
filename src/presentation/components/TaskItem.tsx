@@ -5,18 +5,37 @@ import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 
 export default function TaskItem({
   task,
+  tasks,
   setOpen,
-  setSelectedTask,
+  setTasks,
 }: TaskItemProps) {
   function editItem() {
-    setSelectedTask({
-      id: task.id,
-      title: task.title,
-      notes: task.notes,
-      createdAt: task.createdAt,
-      completed: task.completed,
-    });
+    setTasks([
+      ...tasks.filter((t) => t.id !== task.id),
+      {
+        id: task.id,
+        title: task.title,
+        notes: task.notes,
+        createdAt: task.createdAt,
+        completed: task.completed,
+        concludedAt: task.concludedAt,
+      },
+    ]);
     setOpen(true);
+  }
+
+  function concludeItem() {
+    setTasks([
+      ...tasks.filter((t) => t.id !== task.id),
+      {
+        id: task.id,
+        title: task.title,
+        notes: task.notes,
+        createdAt: task.createdAt,
+        concludedAt: new Date(),
+        completed: true,
+      },
+    ]);
   }
 
   return (
@@ -70,6 +89,7 @@ export default function TaskItem({
             variant="outlined"
             size="small"
             sx={{ textTransform: "none", borderRadius: 1 }}
+            onClick={concludeItem}
           >
             Concluir
           </Button>

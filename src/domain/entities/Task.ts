@@ -3,6 +3,6 @@ export default interface Task {
   title: string;
   completed: boolean;
   createdAt: Date;
-  concludedAt?: Date;
+  concludedAt: Date | null;
   notes?: string;
 }

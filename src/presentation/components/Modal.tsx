@@ -37,6 +37,7 @@ export default function Modal({
         notes: notes.trim(),
         createdAt: new Date(),
         completed: false,
+        concludedAt: null,
       };
       setTasks([...tasks, newTask]);
       setSuccessMessage("Tarefa adicionada com sucesso!");

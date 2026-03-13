@@ -19,6 +19,7 @@ export default function Dashboard() {
     notes: "",
     createdAt: new Date(),
     completed: false,
+    concludedAt: null,
   });
 
   return (
@@ -38,14 +39,14 @@ export default function Dashboard() {
         <Grid {...{ item: true, width: "60%" }}>
           <TaskList
             setEditOpen={setEditOpen}
-            setSelectedTask={setSelectedTask}
-            tasks={tasks}
+            setTasks={setTasks}
+            tasks={tasks.filter((t) => !t.completed)}
           />
 
           <CreateTaskButton onClick={() => setOpen(!open)} />
         </Grid>
 
-        <HistoryList />
+        <HistoryList tasks={tasks} setTasks={setTasks} />
 
         {open && (
           <Grid {...{ item: true, width: "40%" }}>
