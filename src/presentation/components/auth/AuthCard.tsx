@@ -11,7 +11,7 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
   return (
     <Box
       minHeight="100vh"
-      bgcolor="grey.100"
+      sx={{ bgcolor: "var(--color-bg-page)" }}
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -23,23 +23,23 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
         <Typography
           variant="h3"
           fontWeight="bold"
-          color="primary"
+          sx={{ color: "var(--color-primary)" }}
           fontStyle="italic"
         >
           SeniorEase
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary" mt={1}>
+        <Typography variant="subtitle1" sx={{ color: "var(--color-text-secondary)" }} mt={1}>
           Plataforma acessível para você
         </Typography>
       </Box>
 
       {/* Card */}
-      <Paper elevation={3} sx={{ width: "100%", maxWidth: 420, p: 5, borderRadius: 3 }}>
-        <Typography variant="h4" fontWeight="bold" textAlign="center" color="text.primary" mb={1}>
+      <Paper elevation={3} sx={{ width: "100%", maxWidth: 420, p: 5, borderRadius: 3, bgcolor: "var(--color-bg-card)" }}>
+        <Typography variant="h4" fontWeight="bold" textAlign="center" sx={{ color: "var(--color-text-primary)" }} mb={1}>
           {title}
         </Typography>
         {subtitle && (
-          <Typography variant="body1" textAlign="center" color="text.secondary" mb={4}>
+          <Typography variant="body1" textAlign="center" sx={{ color: "var(--color-text-secondary)" }} mb={4}>
             {subtitle}
           </Typography>
         )}
