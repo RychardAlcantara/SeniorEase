@@ -6,4 +6,5 @@ export default interface TaskItemProps {
   tasks: Task[];
   setOpen: (open: boolean) => void;
   setTasks: Dispatch<SetStateAction<Task[]>>;
+  showEditButton?: boolean;
 }

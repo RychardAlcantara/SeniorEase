@@ -2,20 +2,33 @@
 
 import { Card, CardContent, Typography, Stack, Tooltip } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
+import { useContraste } from "../contexts/ContrasteContext";
 
 export default function HistoryList({ tasks }: { tasks: Task[] }) {
   const history = tasks.filter((t) => t.completed);
+  const { altoContraste } = useContraste();
 
   return (
     <Card
       sx={{
         borderRadius: 3,
         boxShadow: 3,
-        backgroundColor: "#fff",
+        backgroundColor: altoContraste
+          ? "var(--color-hc-bg)"
+          : "var(--color-bg-card)",
+        border: altoContraste ? "2px solid var(--color-hc-accent)" : "none",
+        transition: "all 0.3s ease",
       }}
     >
       <CardContent sx={{ p: 3 /* ~ p-6 */ }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            mb: 2,
+            color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          }}
+        >
           Histórico de Tarefas
         </Typography>
 
@@ -29,7 +42,12 @@ export default function HistoryList({ tasks }: { tasks: Task[] }) {
             >
               <Typography
                 component="span"
-                sx={{ color: "primary.main", fontWeight: 700 }}
+                sx={{
+                  color: altoContraste
+                    ? "var(--color-hc-text)"
+                    : "var(--color-primary)",
+                  fontWeight: 700,
+                }}
               >
                 ✔
               </Typography>
