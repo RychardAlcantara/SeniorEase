@@ -23,6 +23,8 @@ export default function Modal({
   tasks,
   setTasks,
 }: ModalProps) {
+  dayjs.locale("pt-br");
+
   const [title, setTitle] = useState(selectedTask?.title ?? "");
   const [notes, setNotes] = useState(selectedTask?.notes ?? "");
   const [toDoDate, setToDoDate] = useState<Dayjs | null>(
@@ -53,7 +55,12 @@ export default function Modal({
     } else if (type === "edit" && selectedTask) {
       const updated = tasks.map((t) =>
         t.id === selectedTask.id
-          ? { ...t, title: title.trim(), notes: notes.trim() }
+          ? {
+              ...t,
+              title: title.trim(),
+              notes: notes.trim(),
+              expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
+            }
           : t,
       );
       setTasks(updated);
@@ -71,10 +78,7 @@ export default function Modal({
   }
 
   const modalTitle = type === "create" ? "Criar nova tarefa" : "Editar tarefa";
-
   const disableInputs = saving || !!successMessage;
-
-  console.log("Selected Task:", selectedTask);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -104,6 +108,29 @@ export default function Modal({
             label="Para quando é a tarefa?"
             value={toDoDate}
             onChange={(newValue) => setToDoDate(newValue)}
+            format="DD/MM/YYYY HH:mm"
+            ampm={false}
+            slotProps={{
+              desktopPaper: { sx: { zIndex: 1600 } }, // acima do Dialog
+              popper: {
+                disablePortal: false, // garante portal
+                modifiers: [
+                  {
+                    name: "preventOverflow",
+                    options: { padding: 8, altAxis: true },
+                  },
+                  {
+                    name: "flip",
+                    options: { fallbackPlacements: ["top", "bottom"] },
+                  },
+                ],
+              },
+              textField: {
+                placeholder: "dd/mm/aaaa hh:mm",
+                inputProps: { inputMode: "numeric" },
+              },
+            }}
+            disabled={disableInputs}
           />
         </Stack>
       </DialogContent>
@@ -115,7 +142,7 @@ export default function Modal({
         <Button
           variant="contained"
           onClick={onSave}
-          disabled={!title.trim() || disableInputs}
+          disabled={!title.trim() || !toDoDate || disableInputs}
           startIcon={saving ? <CircularProgress size={16} /> : null}
         >
           {saving ? "Salvando..." : "Salvar"}

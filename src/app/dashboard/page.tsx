@@ -19,7 +19,6 @@ import getNextTask from "../helpers/getNextTask";
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
   const { config, salvarConfig } = useConfig();
-  const tarefasHoje: number = 3;
   const simplificado = config.modoVisualizacao === "simplificada";
 
   const dataHoje = new Date().toLocaleDateString("pt-BR", {
@@ -30,11 +29,16 @@ function DashboardContent() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const tarefasHoje = tasks.filter((t) => {
+    if (!t.expectedToBeDone) return false;
+    const dataTarefa = new Date(t.expectedToBeDone);
+    return dataTarefa.getDate() === new Date().getDate();
+  });
   const next = getNextTask(tasks);
+
   const nextTitle = next?.task.title ?? "Sem próximas tarefas";
-  const nextTime = next ? formatTimePtBR(next.date) : undefined;
-  const nextDate = next ? formatDatePtBR(next.date) : undefined;
+  const nextTime = next ? formatTimePtBR(next.date) : "-";
+  const nextDate = next ? formatDatePtBR(next.date) : "-";
 
   return (
     <Box
@@ -103,8 +107,8 @@ function DashboardContent() {
             mb: 3,
           }}
         >
-          Hoje é {dataHoje}. Você tem <strong>{tarefasHoje}</strong>{" "}
-          {tarefasHoje === 1 ? "tarefa" : "tarefas"} para hoje.
+          Hoje é {dataHoje}. Você tem <strong>{tarefasHoje.length}</strong>{" "}
+          {tarefasHoje.length === 1 ? "tarefa" : "tarefas"} para hoje.
         </Typography>
 
         {/* Card Próxima Tarefa + Estatística Semanal */}
@@ -112,8 +116,8 @@ function DashboardContent() {
           <Grid size={{ xs: 12, md: simplificado ? 12 : 8 }}>
             <NextTaskCard
               title={nextTitle}
-              time={nextTime ?? "-"}
-              date={nextDate ?? "-"}
+              time={nextTime}
+              date={nextDate}
             />{" "}
           </Grid>
           {!simplificado && (
@@ -142,7 +146,7 @@ function DashboardContent() {
               showEditButton={!simplificado}
               setEditOpen={setEditOpen}
               setTasks={setTasks}
-              tasks={tasks}
+              tasks={tasks.filter((t) => !t.completed)}
             />
 
             <CreateTaskButton onClick={() => setOpen(true)} />

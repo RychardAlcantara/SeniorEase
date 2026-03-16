@@ -19,6 +19,24 @@ export default function TaskList({
 }) {
   const { altoContraste } = useContraste();
 
+  const sortedTasks = tasks.slice().sort((a, b) => {
+    const ta = a.expectedToBeDone
+      ? new Date(a.expectedToBeDone as string).getTime()
+      : Infinity;
+    const tb = b.expectedToBeDone
+      ? new Date(b.expectedToBeDone as string).getTime()
+      : Infinity;
+
+    // Valores inválidos vão para o final
+    const aValid = Number.isFinite(ta);
+    const bValid = Number.isFinite(tb);
+    if (!aValid && !bValid) return 0;
+    if (!aValid) return 1;
+    if (!bValid) return -1;
+
+    return ta - tb; // crescente
+  });
+
   return (
     <Card
       sx={{
@@ -31,16 +49,16 @@ export default function TaskList({
         transition: "all 0.3s ease",
       }}
     >
-      <CardContent sx={{ p: 3 /* ~ p-6 */ }}>
+      <CardContent sx={{ p: 3 }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
           Minhas Tarefas
         </Typography>
 
         <Stack spacing={0}>
-          {tasks.map((task: Task, index: number) => (
+          {sortedTasks.map((task: Task) => (
             <TaskItem
               showEditButton={showEditButton}
-              key={index}
+              key={task.id}
               task={task}
               setOpen={setEditOpen}
               setTasks={setTasks}
