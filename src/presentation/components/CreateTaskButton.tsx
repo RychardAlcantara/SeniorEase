@@ -3,12 +3,13 @@
 import { Button } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
-export default function CreateTaskButton() {
+export default function CreateTaskButton({ onClick }: { onClick: () => void }) {
   const { altoContraste } = useContraste();
 
   return (
     <Button
       fullWidth
+      onClick={onClick}
       sx={{
         mt: 6,
         py: 1.5,
@@ -23,7 +24,9 @@ export default function CreateTaskButton() {
         transition: "all 0.3s ease",
         "&:hover": {
           opacity: 0.9,
-          backgroundImage: altoContraste ? "none" : "var(--gradient-button-hover)",
+          backgroundImage: altoContraste
+            ? "none"
+            : "var(--gradient-button-hover)",
           backgroundColor: altoContraste ? "#15c4d9" : undefined,
         },
       }}

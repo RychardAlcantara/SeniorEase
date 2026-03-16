@@ -1,30 +1,34 @@
 "use client";
 
-import { Card, CardContent, Typography, Stack, Box } from "@mui/material";
-import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
-// Opcional: usar um ícone do MUI em vez do "✔"
-// import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { Card, CardContent, Typography, Stack, Tooltip } from "@mui/material";
+import Task from "@/src/domain/entities/Task";
+import { useContraste } from "../contexts/ContrasteContext";
 
-export default function HistoryList() {
+export default function HistoryList({ tasks }: { tasks: Task[] }) {
+  const history = tasks.filter((t) => t.completed);
   const { altoContraste } = useContraste();
-  const history = [
-    "Participar da reunião — concluído hoje",
-    "Enviar documento — concluído ontem",
-    "Tomar medicamento — concluído 10/05",
-  ];
 
   return (
     <Card
       sx={{
         borderRadius: 3,
         boxShadow: 3,
-        backgroundColor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-card)",
+        backgroundColor: altoContraste
+          ? "var(--color-hc-bg)"
+          : "var(--color-bg-card)",
         border: altoContraste ? "2px solid var(--color-hc-accent)" : "none",
         transition: "all 0.3s ease",
       }}
     >
       <CardContent sx={{ p: 3 /* ~ p-6 */ }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: altoContraste ? "var(--color-hc-text)" : "inherit" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            mb: 2,
+            color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          }}
+        >
           Histórico de Tarefas
         </Typography>
 
@@ -38,13 +42,36 @@ export default function HistoryList() {
             >
               <Typography
                 component="span"
-                sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-primary)", fontWeight: 700 }}
+                sx={{
+                  color: altoContraste
+                    ? "var(--color-hc-text)"
+                    : "var(--color-primary)",
+                  fontWeight: 700,
+                }}
               >
                 ✔
               </Typography>
-              <Typography variant="body2" sx={{ color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)" }}>
-                {item}
-              </Typography>
+              <Tooltip title={item.notes} placement="top" arrow>
+                <Typography variant="body2" sx={{ color: "grey.600" }}>
+                  {item.title} — concluído{" "}
+                  {item.concludedAt
+                    ? new Date(item.concludedAt).getDate().toString() ===
+                      new Date().getDate().toString()
+                      ? "hoje"
+                      : new Date(item.concludedAt).getDate().toString() ===
+                          (new Date().getDate() - 1).toString()
+                        ? "ontem"
+                        : new Date(item.concludedAt).toLocaleDateString(
+                            "pt-BR",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "2-digit",
+                            },
+                          )
+                    : null}
+                </Typography>
+              </Tooltip>
             </Stack>
           ))}
         </Stack>
