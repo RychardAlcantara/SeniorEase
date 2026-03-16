@@ -4,19 +4,17 @@ import Navbar from "@/src/presentation/components/Navbar";
 import TaskList from "@/src/presentation/components/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import { useState } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Switch, Stack, Container, Typography } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
 import Modal from "@/src/presentation/components/Modal";
 import NextTaskCard from "@/src/presentation/components/NextTaskCard";
 import WeeklyStatsCard from "@/src/presentation/components/WeeklyStatsCard";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useConfig } from "@/src/presentation/contexts/ConfigContext";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Stack from "@mui/material/Stack";
 import HistoryList from "@/src/presentation/components/HistoryList";
+import { formatTimePtBR, formatDatePtBR } from "../helpers/formatDatePtBR";
+import getNextTask from "../helpers/getNextTask";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
@@ -32,6 +30,11 @@ function DashboardContent() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  const next = getNextTask(tasks);
+  const nextTitle = next?.task.title ?? "Sem próximas tarefas";
+  const nextTime = next ? formatTimePtBR(next.date) : undefined;
+  const nextDate = next ? formatDatePtBR(next.date) : undefined;
 
   return (
     <Box
@@ -107,7 +110,11 @@ function DashboardContent() {
         {/* Card Próxima Tarefa + Estatística Semanal */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
           <Grid size={{ xs: 12, md: simplificado ? 12 : 8 }}>
-            <NextTaskCard title="Tomar medicamento" time="08:00" date="Hoje" />
+            <NextTaskCard
+              title={nextTitle}
+              time={nextTime ?? "-"}
+              date={nextDate ?? "-"}
+            />{" "}
           </Grid>
           {!simplificado && (
             <Grid size={{ xs: 12, md: 4 }}>
@@ -138,7 +145,7 @@ function DashboardContent() {
               tasks={tasks}
             />
 
-            <CreateTaskButton onClick={() => {}} />
+            <CreateTaskButton onClick={() => setOpen(true)} />
           </Grid>
 
           {!simplificado && (

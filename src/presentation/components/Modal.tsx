@@ -1,3 +1,4 @@
+"use client";
 import ModalProps from "@/src/domain/entities/ModalProps";
 import {
   Dialog,
@@ -11,6 +12,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function Modal({
   type,
@@ -22,6 +25,11 @@ export default function Modal({
 }: ModalProps) {
   const [title, setTitle] = useState(selectedTask?.title ?? "");
   const [notes, setNotes] = useState(selectedTask?.notes ?? "");
+  const [toDoDate, setToDoDate] = useState<Dayjs | null>(
+    selectedTask?.expectedToBeDone
+      ? dayjs(selectedTask.expectedToBeDone)
+      : null,
+  );
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -35,6 +43,7 @@ export default function Modal({
         id: tasks.length.toString(),
         title: title.trim(),
         notes: notes.trim(),
+        expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
         createdAt: new Date(),
         completed: false,
         concludedAt: null,
@@ -65,6 +74,8 @@ export default function Modal({
 
   const disableInputs = saving || !!successMessage;
 
+  console.log("Selected Task:", selectedTask);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{modalTitle}</DialogTitle>
@@ -88,6 +99,11 @@ export default function Modal({
             multiline
             minRows={3}
             disabled={disableInputs}
+          />
+          <DateTimePicker
+            label="Para quando é a tarefa?"
+            value={toDoDate}
+            onChange={(newValue) => setToDoDate(newValue)}
           />
         </Stack>
       </DialogContent>

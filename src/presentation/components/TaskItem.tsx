@@ -3,6 +3,7 @@
 import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import dayjs from "dayjs";
 
 export default function TaskItem({
   task,
@@ -14,17 +15,7 @@ export default function TaskItem({
   const { altoContraste } = useContraste();
 
   function editItem() {
-    setTasks([
-      ...tasks.filter((t) => t.id !== task.id),
-      {
-        id: task.id,
-        title: task.title,
-        notes: task.notes,
-        createdAt: task.createdAt,
-        completed: task.completed,
-        concludedAt: task.concludedAt,
-      },
-    ]);
+    setTasks([...tasks.filter((t) => t.id !== task.id), { ...task }]);
     setOpen(true);
   }
 
@@ -38,20 +29,17 @@ export default function TaskItem({
     );
   }
 
+  const formattedDateTime = task.expectedToBeDone
+    ? dayjs(task.expectedToBeDone).format("ddd, DD [de] MMM [•] HH:mm")
+    : null;
+
   return (
-    <Box
-      sx={{
-        width: "100%",
-      }}
-    >
+    <Box sx={{ width: "100%" }}>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{
-          py: 1.5,
-          width: "100%",
-        }}
+        sx={{ py: 1.5, width: "100%" }}
       >
         <Stack
           direction="row"
@@ -71,7 +59,11 @@ export default function TaskItem({
             ✔
           </Typography>
 
-          <Stack direction="column" alignItems="flex-start">
+          <Stack
+            direction="column"
+            alignItems="flex-start"
+            sx={{ minWidth: 0 }}
+          >
             <Typography
               variant="body1"
               sx={{
@@ -81,16 +73,49 @@ export default function TaskItem({
                   : "var(--color-text-primary)",
               }}
               noWrap
+              title={task.title}
             >
               {task.title}
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "1rem", color: "grey.700" }}
-              noWrap
-            >
-              {task.notes}
-            </Typography>
+
+            {/* Notas */}
+            {task.notes && (
+              <Typography
+                variant="body2"
+                sx={{ fontSize: "0.95rem", color: "grey.700" }}
+                noWrap
+                title={task.notes}
+              >
+                {task.notes}
+              </Typography>
+            )}
+
+            {/* Data/Hora formatada */}
+            {formattedDateTime && (
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "text.secondary",
+                    fontWeight: 600,
+                  }}
+                >
+                  Para:
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "text.secondary",
+                  }}
+                >
+                  {formattedDateTime}
+                </Typography>
+              </Stack>
+            )}
           </Stack>
         </Stack>
 
