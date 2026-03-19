@@ -146,7 +146,14 @@ function DashboardContent() {
               showEditButton={!simplificado}
               setEditOpen={setEditOpen}
               setTasks={setTasks}
-              tasks={tasks.filter((t) => !t.completed)}
+              tasks={tasks
+                .filter((t) => !t.completed)
+                .slice()
+                .sort((a, b) => {
+                  const da = a.expectedToBeDone ? new Date(a.expectedToBeDone).getTime() : Infinity;
+                  const db = b.expectedToBeDone ? new Date(b.expectedToBeDone).getTime() : Infinity;
+                  return da - db;
+                })}
             />
 
             <CreateTaskButton onClick={() => setOpen(true)} />
