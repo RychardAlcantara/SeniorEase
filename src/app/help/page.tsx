@@ -13,6 +13,7 @@ import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
 import Divider from "@mui/material/Divider"
 import { ChevronDown, HelpCircle, BookOpen, MessageCircleQuestion, Phone, Mail, LifeBuoy } from "lucide-react"
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 
 const guiaSections = [
 	{
@@ -91,6 +92,7 @@ function HelpContent() {
 	const accentColor = altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)"
 
 	return (
+		<PrivateRoute>
 		<Box
 			sx={{
 				minHeight: "100vh",
@@ -224,6 +226,7 @@ function HelpContent() {
 				</Card>
 			</Container>
 		</Box>
+		</PrivateRoute>
 	)
 }
 

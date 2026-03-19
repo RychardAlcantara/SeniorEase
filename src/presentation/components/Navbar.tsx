@@ -1,23 +1,36 @@
-"use client";
+"use client"
 
-import { Home, ListTodo, Settings, User, LogOut } from "lucide-react"
-import Link from "next/link";
-import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
-import { useAuth } from "@/src/infrastructure/AuthContext"
-import { signOutUseCase } from "@/src/infrastructure/container"
+import { useEffect, useState } from "react"
+import { Home, ListTodo, Settings, LogOut } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { AppBar, Toolbar, Typography, Button, Box, Container, Stack } from "@mui/material"
+import { useContraste } from "@/src/presentation/contexts/ContrasteContext"
+import { useAuth } from "@/src/infrastructure/AuthContext"
+import { signOutUseCase, getUserProfileUseCase } from "@/src/infrastructure/container"
+import { UserAvatar } from "@/src/presentation/components/profile/UserAvatar"
+import { UserProfile } from "@/src/domain/entities/UserProfile"
+
+const links = [
+  { title: "Início", href: "/dashboard", icon: <Home size={20} /> },
+  { title: "Tarefas", href: "/tasks", icon: <ListTodo size={20} /> },
+  { title: "Configurações", href: "/settings", icon: <Settings size={20} /> },
+]
 
 export default function Navbar() {
   const router = useRouter()
   const { user } = useAuth()
-  const { altoContraste } = useContraste();
-  const links = [
-    { title: "Início", href: "/dashboard", icon: <Home size={20} /> },
-    { title: "Tarefas", href: "/tasks", icon: <ListTodo size={20} /> },
-    { title: "Configurações", href: "/settings", icon: <Settings size={20} /> },
-    { title: "Meu Perfil", href: "#", icon: <User size={20} /> },
-  ];
+  const { altoContraste } = useContraste()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return
+      const data = await getUserProfileUseCase.execute(user.id)
+      setProfile(data)
+    }
+    loadProfile()
+  }, [user])
 
   async function handleSignOut() {
     await signOutUseCase.execute()
@@ -38,16 +51,17 @@ export default function Navbar() {
       <Container maxWidth="lg">
         <Toolbar
           disableGutters
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            p: 1,
-          }}
+          sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1 }}
         >
+
+          {/* Logo */}
           <Typography
             variant="h5"
-            sx={{ fontWeight: 700, fontStyle: "italic", color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-white)" }}
+            sx={{
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-white)",
+            }}
           >
             SeniorEase
           </Typography>
@@ -60,15 +74,26 @@ export default function Navbar() {
                 component={Link}
                 href={link.href}
                 color="inherit"
-                sx={{ textTransform: "none", color: altoContraste ? "var(--color-hc-text)" : "inherit", "&:hover": { opacity: 0.8 } }}
                 startIcon={link.icon}
+                sx={{
+                  textTransform: "none",
+                  color: altoContraste ? "var(--color-hc-text)" : "inherit",
+                  "&:hover": { opacity: 0.8 },
+                }}
               >
                 {link.title}
               </Button>
             ))}
           </Stack>
 
-          <Stack direction="row" spacing={1.5}>
+          {/* Ações */}
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            
+            {/* Avatar com link para perfil */}
+            <Box component={Link} href="/profile" sx={{ display: "flex", alignItems: "center" }}>
+              <UserAvatar profile={profile} size={38} />
+            </Box>
+
             <Button
               component={Link}
               href="/help"
@@ -79,8 +104,6 @@ export default function Navbar() {
                 textTransform: "none",
                 fontWeight: 600,
                 borderRadius: 2,
-                px: 2,
-                py: 1,
                 "&:hover": {
                   backgroundColor: altoContraste ? "#15c4d9" : "var(--color-bg-hover)",
                 },
@@ -88,7 +111,7 @@ export default function Navbar() {
             >
               Precisa de ajuda?
             </Button>
-            
+
             <Button
               variant="contained"
               onClick={handleSignOut}
@@ -99,8 +122,6 @@ export default function Navbar() {
                 textTransform: "none",
                 fontWeight: 600,
                 borderRadius: 2,
-                px: 2,
-                py: 1,
                 "&:hover": {
                   backgroundColor: altoContraste ? "#15c4d9" : "var(--color-bg-hover)",
                 },
@@ -108,6 +129,7 @@ export default function Navbar() {
             >
               Sair
             </Button>
+
           </Stack>
         </Toolbar>
       </Container>

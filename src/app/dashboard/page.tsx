@@ -15,6 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import HistoryList from "@/src/presentation/components/HistoryList";
 import { formatTimePtBR, formatDatePtBR } from "../helpers/formatDatePtBR";
 import getNextTask from "../helpers/getNextTask";
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
@@ -41,6 +42,7 @@ function DashboardContent() {
   const nextDate = next ? formatDatePtBR(next.date) : "-";
 
   return (
+    <PrivateRoute>
     <Box
       sx={{
         minHeight: "100vh",
@@ -200,6 +202,7 @@ function DashboardContent() {
         </Grid>
       </Container>
     </Box>
+    </PrivateRoute>
   );
 }
 
