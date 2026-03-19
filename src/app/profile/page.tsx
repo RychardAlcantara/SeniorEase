@@ -61,6 +61,12 @@ export default function ProfilePage() {
     setPreviewURL(URL.createObjectURL(file))
   }
 
+  function handleRemovePhoto() {
+    setPhotoFile(undefined)
+    setPreviewURL(undefined)
+    setPhotoURL(undefined)
+  }
+
   async function handleSaveProfile() {
     if (!user) return
     setProfileError("")
@@ -112,7 +118,7 @@ export default function ProfilePage() {
             component={Link}
             href="/dashboard"
             startIcon={<ArrowBack />}
-            sx={{ mb: 3, textTransform: "none", color: "#1565c0" }}
+            sx={{ mb: 1, textTransform: "none", color: "#1565c0" }}
           >
             Voltar ao Dashboard
           </Button>
@@ -166,6 +172,7 @@ export default function ProfilePage() {
                           previewURL={previewURL}
                           initials={initials}
                           onFileSelect={handleFileSelect}
+                          onRemove={handleRemovePhoto}
                         />
                       </Box>
 

@@ -91,7 +91,7 @@ export default function Navbar() {
             
             {/* Avatar com link para perfil */}
             <Box component={Link} href="/profile" sx={{ display: "flex", alignItems: "center" }}>
-              <UserAvatar profile={profile} size={38} />
+              <UserAvatar profile={profile} size={40} />
             </Box>
 
             <Button

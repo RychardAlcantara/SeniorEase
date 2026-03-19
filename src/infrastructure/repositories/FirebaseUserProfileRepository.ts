@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc, deleteField } from "firebase/firestore"
 import { db } from "../firebase"
 import { UserProfileRepository } from "../../domain/repositories/UserProfileRepository"
 import { UserProfile } from "../../domain/entities/UserProfile"
@@ -15,14 +15,23 @@ export class FirebaseUserProfileRepository implements UserProfileRepository {
   }
 
   async saveProfile(profile: UserProfile): Promise<void> {
-    // Firestore não aceita campos com valor undefined
+    const ref = doc(db, "users", profile.id)
+
+    // Campos normais sem photoURL
     const data = Object.fromEntries(
-      Object.entries(profile).filter(([, value]) => value !== undefined)
+      Object.entries(profile).filter(([key, value]) => key !== "photoURL" && value !== undefined)
     )
-    await setDoc(doc(db, "users", profile.id), data, { merge: true })
+
+    if (profile.photoURL) {
+      // Tem foto: salva normalmente com photoURL
+      await setDoc(ref, { ...data, photoURL: profile.photoURL }, { merge: true })
+    } else {
+      // Sem foto: salva os demais campos e remove photoURL explicitamente
+      await setDoc(ref, data, { merge: true })
+      await updateDoc(ref, { photoURL: deleteField() })
+    }
   }
 
-  // Converte a foto para Base64 e salva junto no Firestore
   async uploadPhoto(_userId: string, file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       if (file.size > 2 * 1024 * 1024) {

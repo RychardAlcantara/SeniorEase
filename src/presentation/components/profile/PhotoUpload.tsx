@@ -1,8 +1,8 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Box, Avatar, IconButton, Typography, Tooltip } from "@mui/material"
-import { CameraAlt } from "@mui/icons-material"
+import { Box, Avatar, IconButton, Typography, Tooltip, Button } from "@mui/material"
+import { CameraAlt, DeleteOutline } from "@mui/icons-material"
 import { AlertMessage } from "@/src/presentation/components/auth/AlertMessage"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png"]
@@ -14,26 +14,25 @@ interface PhotoUploadProps {
   previewURL?: string
   initials: string
   onFileSelect: (file: File) => void
+  onRemove: () => void
 }
 
-export function PhotoUpload({ currentPhotoURL, previewURL, initials, onFileSelect }: PhotoUploadProps) {
+export function PhotoUpload({ currentPhotoURL, previewURL, initials, onFileSelect, onRemove }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState("")
+
+  const hasPhoto = !!(previewURL ?? currentPhotoURL)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setError("")
     const file = e.target.files?.[0]
-
-    // Limpa o input para permitir selecionar o mesmo arquivo após erro
     e.target.value = ""
-
     if (!file) return
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       setError("Formato inválido. Envie apenas JPG ou PNG.")
       return
     }
-
     if (file.size > MAX_SIZE_BYTES) {
       setError(`A imagem deve ter no máximo ${MAX_SIZE_MB}MB.`)
       return
@@ -42,14 +41,20 @@ export function PhotoUpload({ currentPhotoURL, previewURL, initials, onFileSelec
     onFileSelect(file)
   }
 
+  function handleRemove() {
+    setError("")
+    onRemove()
+  }
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
+
       <Box position="relative" display="inline-block">
         <Avatar
           src={previewURL ?? currentPhotoURL}
-          sx={{ width: 100, height: 100, fontSize: 36, bgcolor: "#1565c0" }}
+          sx={{ width: 150, height: 150, fontSize: 36, bgcolor: "#1565c0" }}
         >
-          {!(previewURL ?? currentPhotoURL) && initials}
+          {!hasPhoto && initials}
         </Avatar>
 
         <Tooltip title="Alterar foto">
@@ -73,6 +78,22 @@ export function PhotoUpload({ currentPhotoURL, previewURL, initials, onFileSelec
       <Typography variant="caption" color="text.secondary">
         JPG ou PNG até {MAX_SIZE_MB}MB
       </Typography>
+
+      {hasPhoto && (
+        <Button
+          size="small"
+          startIcon={<DeleteOutline fontSize="small" />}
+          onClick={handleRemove}
+          sx={{
+            color: "#ef5350",
+            textTransform: "none",
+            fontSize: "0.8rem",
+            "&:hover": { bgcolor: "#ffeaea" },
+          }}
+        >
+          Remover foto
+        </Button>
+      )}
 
       {error && (
         <Box width="100%" maxWidth={300}>
