@@ -3,7 +3,7 @@
 import Navbar from "@/src/presentation/components/Navbar";
 import TaskList from "@/src/presentation/components/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Switch, Stack, Container, Typography } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
 import Modal from "@/src/presentation/components/Modal";
@@ -16,11 +16,25 @@ import HistoryList from "@/src/presentation/components/HistoryList";
 import { formatTimePtBR, formatDatePtBR } from "../helpers/formatDatePtBR";
 import getNextTask from "../helpers/getNextTask";
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
+import { useAuth } from "@/src/infrastructure/AuthContext";
+import { UserProfile } from "@/src/domain/entities/UserProfile";
+import { getUserProfileUseCase } from "@/src/infrastructure/container";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
   const { config, salvarConfig } = useConfig();
   const simplificado = config.modoVisualizacao === "simplificada";
+  const { user } = useAuth()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return
+      const data = await getUserProfileUseCase.execute(user.id)
+      setProfile(data)
+    }
+    loadProfile()
+  }, [user])
 
   const dataHoje = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
@@ -69,7 +83,7 @@ function DashboardContent() {
                 : "var(--color-text-primary)",
             }}
           >
-            Olá, Usuário!
+            Olá, {profile ? `${profile.firstName} ${profile.lastName}` : "Usuário"}!
           </Typography>
 
           <FormControlLabel
