@@ -123,6 +123,7 @@ function TasksContent() {
             <CreateTaskButton onClick={() => setOpen(true)} />
           </Box>
 
+          {!simplificado && (
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3, width: "100%" }}>
             <TextField
               placeholder="Buscar tarefas..."
@@ -216,6 +217,7 @@ function TasksContent() {
               </ToggleButtonGroup>
             </Stack>
           </Stack>
+          )}
 
           <Tabs
             value={tab}

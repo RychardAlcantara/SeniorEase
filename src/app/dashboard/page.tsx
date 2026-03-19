@@ -175,36 +175,34 @@ function DashboardContent() {
               </Typography>
 
               <HistoryList tasks={tasks} />
-
-              {open && (
-                <Grid {...{ item: true, width: "40%" }}>
-                  <Modal
-                    type="create"
-                    open={open}
-                    onClose={() => setOpen(!open)}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                  />
-                </Grid>
-              )}
-
-              {editOpen && (
-                <Grid {...{ item: true, width: "40%" }}>
-                  <Modal
-                    type="edit"
-                    open={editOpen}
-                    onClose={() => setEditOpen(!editOpen)}
-                    selectedTask={tasks.find(
-                      (t) => t.id === tasks[tasks.length - 1].id,
-                    )}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                  />
-                </Grid>
-              )}
             </Grid>
           )}
         </Grid>
+
+        {/* Modal Criar Tarefa */}
+        {open && (
+          <Modal
+            type="create"
+            open={open}
+            onClose={() => setOpen(false)}
+            tasks={tasks}
+            setTasks={setTasks}
+          />
+        )}
+
+        {/* Modal Editar Tarefa */}
+        {editOpen && (
+          <Modal
+            type="edit"
+            open={editOpen}
+            onClose={() => setEditOpen(false)}
+            selectedTask={tasks.find(
+              (t) => t.id === tasks[tasks.length - 1].id,
+            )}
+            tasks={tasks}
+            setTasks={setTasks}
+          />
+        )}
       </Container>
     </Box>
   );

@@ -43,12 +43,12 @@ const guiaSections = [
 	{
 		titulo: "Diferença entre modo Simplificado e Avançado",
 		descricao:
-			"O modo Simplificado mostra apenas a lista de tarefas e o próximo compromisso, ideal para quem quer uma interface mais limpa. O modo Avançado exibe também as estatísticas semanais, o histórico de tarefas e botões de edição.",
+			"O modo Simplificado mostra apenas o essencial, com menos informações na tela. Ele é indicado para quem prefere uma navegação mais fácil e sem distrações. O modo Avançado exibe mais opções e detalhes, como estatísticas, edição de tarefas e outras funcionalidades. Ele é indicado para quem já tem mais familiaridade com o sistema.",
 	},
 	{
 		titulo: "Como usar a tela de Tarefas",
 		descricao:
-			'Na barra de navegação, clique em "Tarefas" para acessar a tela completa de gerenciamento. Lá você encontra duas abas: "Pendentes" com as tarefas a fazer e "Concluídas" com o histórico. Use o campo de busca para encontrar tarefas pelo nome e os botões de ordenação para organizar por data (mais antigas ou mais recentes primeiro).',
+			'Na barra de navegação, clique em "Tarefas" para acessar a tela completa de gerenciamento. Lá você encontra duas abas: "Pendentes" com as tarefas a fazer e "Concluídas" com o histórico. No modo Avançado, você também pode usar o campo de busca para encontrar tarefas pelo nome, os botões de ordenação para organizar por data e o botão de editar em cada tarefa.',
 	},
 ]
 
@@ -76,12 +76,12 @@ const faqItems = [
 	{
 		pergunta: "Como busco uma tarefa específica?",
 		resposta:
-			'Na tela "Tarefas", utilize o campo de busca no topo da página. Digite parte do nome da tarefa e a lista será filtrada automaticamente, tanto na aba de pendentes quanto na de concluídas.',
+			'No modo Avançado, na tela "Tarefas", utilize o campo de busca no topo da página. Digite parte do nome da tarefa e a lista será filtrada automaticamente, tanto na aba de pendentes quanto na de concluídas. No modo Simplificado, o campo de busca não é exibido.',
 	},
 	{
 		pergunta: "Como ordeno as tarefas por data?",
 		resposta:
-			'Na tela "Tarefas", ao lado do campo de busca, você encontra os botões "Mais antigas" e "Mais recentes". Clique em "Mais antigas" para ver primeiro as tarefas com datas mais antigas, ou em "Mais recentes" para ver as mais recentes no topo.',
+			'No modo Avançado, na tela "Tarefas", ao lado do campo de busca, você encontra os botões "Mais antigas" e "Mais recentes". Clique em "Mais antigas" para ver primeiro as tarefas com datas mais próximas, ou em "Mais recentes" para ver as mais recentes no topo. No modo Simplificado, essa opção não é exibida.',
 	},
 	{
 		pergunta: "Como volto para a tela principal?",
