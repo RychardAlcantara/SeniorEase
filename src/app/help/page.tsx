@@ -45,6 +45,11 @@ const guiaSections = [
 		descricao:
 			"O modo Simplificado mostra apenas a lista de tarefas e o próximo compromisso, ideal para quem quer uma interface mais limpa. O modo Avançado exibe também as estatísticas semanais, o histórico de tarefas e botões de edição.",
 	},
+	{
+		titulo: "Como usar a tela de Tarefas",
+		descricao:
+			'Na barra de navegação, clique em "Tarefas" para acessar a tela completa de gerenciamento. Lá você encontra duas abas: "Pendentes" com as tarefas a fazer e "Concluídas" com o histórico. Use o campo de busca para encontrar tarefas pelo nome e os botões de ordenação para organizar por data (mais antigas ou mais recentes primeiro).',
+	},
 ]
 
 const faqItems = [
@@ -66,7 +71,17 @@ const faqItems = [
 	{
 		pergunta: "Onde vejo as tarefas que já concluí?",
 		resposta:
-			'No modo Avançado, a seção "Histórico" aparece ao lado da lista de tarefas no Início. No modo Simplificado, o histórico não é exibido para manter a tela mais limpa. Você também pode acessar o histórico através da tela "Tarefas" localizada na barra de navegação.',
+			'Você pode ver as tarefas concluídas de duas formas: no Modo Avançado do Início, a seção "Histórico" aparece ao lado da lista de tarefas. Ou acesse a tela "Tarefas" na barra de navegação e clique na aba "Concluídas" para ver o histórico completo.',
+	},
+	{
+		pergunta: "Como busco uma tarefa específica?",
+		resposta:
+			'Na tela "Tarefas", utilize o campo de busca no topo da página. Digite parte do nome da tarefa e a lista será filtrada automaticamente, tanto na aba de pendentes quanto na de concluídas.',
+	},
+	{
+		pergunta: "Como ordeno as tarefas por data?",
+		resposta:
+			'Na tela "Tarefas", ao lado do campo de busca, você encontra os botões "Mais antigas" e "Mais recentes". Clique em "Mais antigas" para ver primeiro as tarefas com datas mais antigas, ou em "Mais recentes" para ver as mais recentes no topo.',
 	},
 	{
 		pergunta: "Como volto para a tela principal?",
