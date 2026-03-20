@@ -26,11 +26,9 @@ export class TaskRepositoryImpl implements TaskRepository {
     return task;
   }
 
-  async delete(task: Task): Promise<void> {
-    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-
-    const updated = tasks.filter((t: Task) => t.id !== task.id);
-
-    localStorage.setItem("tasks", JSON.stringify(updated));
+  async delete(id: string): Promise<void> {
+    const tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const remaining = tasks.filter((t) => t.id !== id);
+    localStorage.setItem("tasks", JSON.stringify(remaining));
   }
 }

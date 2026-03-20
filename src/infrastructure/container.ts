@@ -7,6 +7,7 @@ import { TaskRepositoryImpl } from "./repositories/TaskRepositoryImpl";
 import { CreateTask } from "../domain/usecases/CreateTask";
 import { GetAllTasks } from "../domain/usecases/GetAllTasks";
 import { UpdateTask } from "../domain/usecases/UpdateTask";
+import { DeleteTask } from "../domain/usecases/DeleteTask";
 
 const authRepository = new FirebaseAuthRepository();
 const taskRepository = new TaskRepositoryImpl();
@@ -19,3 +20,4 @@ export const signOutUseCase = new SignOutUseCase(authRepository);
 export const createTaskUseCase = new CreateTask(taskRepository);
 export const updateTaskUseCase = new UpdateTask(taskRepository);
 export const getAllTasksUseCase = new GetAllTasks(taskRepository);
+export const deleteTaskUseCase = new DeleteTask(taskRepository);

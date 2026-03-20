@@ -1,13 +1,13 @@
 "use client";
 
 import Navbar from "@/src/presentation/components/Navbar";
-import TaskList from "@/src/presentation/components/TaskList";
+import TaskList from "@/src/presentation/components/tasks/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import { useEffect, useState } from "react";
 import { Box, Grid, Switch, Stack, Container, Typography } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
-import Modal from "@/src/presentation/components/Modal";
-import NextTaskCard from "@/src/presentation/components/NextTaskCard";
+import Modal from "@/src/presentation/components/tasks/Modal";
+import NextTaskCard from "@/src/presentation/components/tasks/NextTaskCard";
 import WeeklyStatsCard from "@/src/presentation/components/WeeklyStatsCard";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useConfig } from "@/src/presentation/contexts/ConfigContext";

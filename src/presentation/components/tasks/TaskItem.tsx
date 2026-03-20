@@ -4,6 +4,13 @@ import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import dayjs from "dayjs";
+import {
+  deleteTaskUseCase,
+  updateTaskUseCase,
+} from "@/src/infrastructure/container";
+import Task from "@/src/domain/entities/Task";
+import { useState } from "react";
+import DeleteModal from "./ModalDelete";
 
 export default function TaskItem({
   task,
@@ -13,13 +20,15 @@ export default function TaskItem({
   showEditButton = true,
 }: TaskItemProps) {
   const { altoContraste } = useContraste();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   function editItem() {
     setTasks([...tasks.filter((t) => t.id !== task.id), { ...task }]);
     setOpen(true);
   }
 
-  function concludeItem() {
+  async function concludeItem() {
     setTasks((prev) =>
       prev.map((t) =>
         t.id === task.id
@@ -27,8 +36,34 @@ export default function TaskItem({
           : t,
       ),
     );
+    try {
+      await updateTaskUseCase.execute({
+        ...task,
+        completed: true,
+        concludedAt: new Date(),
+      } as Task);
+    } catch {
+      console.error("Erro ao concluir tarefa:");
+    }
   }
 
+  async function confirmDelete() {
+    setDeleting(true);
+    const prevTasks = tasks;
+    // Optimistic: remove do estado
+    setTasks(prevTasks.filter((t) => t.id !== task.id));
+
+    try {
+      await deleteTaskUseCase.execute(task.id);
+      setConfirmOpen(false);
+    } catch (e) {
+      console.error("Erro ao excluir tarefa:", e);
+      // Reverte estado em caso de falha
+      setTasks(prevTasks);
+    } finally {
+      setDeleting(false);
+    }
+  }
   const formattedDateTime = task.expectedToBeDone
     ? dayjs(task.expectedToBeDone).format("ddd, DD [de] MMM [•] HH:mm")
     : null;
@@ -164,6 +199,15 @@ export default function TaskItem({
               Editar
             </Button>
           )}
+          <Button
+            variant="text"
+            color="error"
+            size="small"
+            onClick={() => setConfirmOpen(true)}
+            sx={{ textTransform: "none" }}
+          >
+            Excluir
+          </Button>
         </Stack>
       </Stack>
 
@@ -171,6 +215,16 @@ export default function TaskItem({
         sx={{
           borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
         }}
+      />
+      <DeleteModal
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        loading={deleting}
+        title="Confirmar exclusão"
+        message={`Tem certeza que deseja excluir a tarefa “${task.title}”? Essa ação não pode ser desfeita.`}
+        confirmLabel="Excluir"
+        cancelLabel="Cancelar"
       />
     </Box>
   );
