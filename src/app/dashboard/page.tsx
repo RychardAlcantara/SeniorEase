@@ -3,7 +3,7 @@
 import Navbar from "@/src/presentation/components/Navbar";
 import TaskList from "@/src/presentation/components/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Switch, Stack, Container, Typography } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
 import Modal from "@/src/presentation/components/Modal";
@@ -15,6 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import HistoryList from "@/src/presentation/components/HistoryList";
 import { formatTimePtBR, formatDatePtBR } from "../helpers/formatDatePtBR";
 import getNextTask from "../helpers/getNextTask";
+import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
@@ -39,6 +40,19 @@ function DashboardContent() {
   const nextTitle = next?.task.title ?? "Sem próximas tarefas";
   const nextTime = next ? formatTimePtBR(next.date) : "-";
   const nextDate = next ? formatDatePtBR(next.date) : "-";
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const all = await getAllTasksUseCase.execute();
+        setTasks(all);
+      } catch (err) {
+        console.error("Erro ao carregar tarefas:", err);
+      }
+    };
+
+    loadTasks();
+  }, [open, editOpen]);
 
   return (
     <Box
