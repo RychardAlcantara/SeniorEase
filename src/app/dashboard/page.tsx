@@ -162,7 +162,7 @@ function DashboardContent() {
               setEditOpen={setEditOpen}
               setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
-              tasks={tasks.filter((t) => !t.completed)}
+              tasks={tasks}
             />
 
             <CreateTaskButton onClick={() => setOpen(true)} />
