@@ -9,11 +9,13 @@ import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 export default function TaskList({
   showEditButton,
   setEditOpen,
+  setSelectedTaskId,
   setTasks,
   tasks,
 }: {
   showEditButton?: boolean;
   setEditOpen: (open: boolean) => void;
+  setSelectedTaskId: (id: string | null) => void;
   setTasks: Dispatch<SetStateAction<Task[]>>;
   tasks: Task[];
 }) {
@@ -61,6 +63,7 @@ export default function TaskList({
               key={task.id}
               task={task}
               setOpen={setEditOpen}
+              setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
               tasks={tasks}
             />

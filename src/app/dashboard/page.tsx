@@ -29,6 +29,7 @@ function DashboardContent() {
   });
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const tarefasHoje = tasks.filter((t) => {
     if (!t.expectedToBeDone) return false;
@@ -159,6 +160,7 @@ function DashboardContent() {
             <TaskList
               showEditButton={!simplificado}
               setEditOpen={setEditOpen}
+              setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
               tasks={tasks.filter((t) => !t.completed)}
             />
@@ -201,9 +203,9 @@ function DashboardContent() {
                     type="edit"
                     open={editOpen}
                     onClose={() => setEditOpen(!editOpen)}
-                    selectedTask={tasks.find(
-                      (t) => t.id === tasks[tasks.length - 1].id,
-                    )}
+                    selectedTask={
+                      tasks.find((t) => t.id === selectedTaskId) || undefined
+                    }
                     tasks={tasks}
                     setTasks={setTasks}
                   />

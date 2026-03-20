@@ -16,6 +16,7 @@ export default function TaskItem({
   task,
   tasks,
   setOpen,
+  setSelectedTaskId,
   setTasks,
   showEditButton = true,
 }: TaskItemProps) {
@@ -24,7 +25,7 @@ export default function TaskItem({
   const [deleting, setDeleting] = useState(false);
 
   function editItem() {
-    setTasks([...tasks.filter((t) => t.id !== task.id), { ...task }]);
+    setSelectedTaskId(task.id);
     setOpen(true);
   }
 
