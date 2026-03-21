@@ -15,7 +15,8 @@ import { signUpUseCase } from "@/src/infrastructure/container"
 export default function RegisterPage() {
   const router = useRouter()
 
-  const [name, setName] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -26,7 +27,7 @@ export default function RegisterPage() {
     setError("")
     setLoading(true)
     try {
-      await signUpUseCase.execute(email, password, confirmPassword, name)
+      await signUpUseCase.execute(email, password, confirmPassword, firstName, lastName)
       router.push("/dashboard")
     } catch (err: any) {
       setError(err.message)
@@ -42,11 +43,19 @@ export default function RegisterPage() {
         {error && <AlertMessage type="error" message={error} />}
 
         <AuthInput
-          label="Nome completo"
+          label="Nome"
           type="text"
           placeholder="Digite seu nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+
+        <AuthInput
+          label="Sobrenome"
+          type="text"
+          placeholder="Digite seu sobrenome"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
         />
 
         <AuthInput

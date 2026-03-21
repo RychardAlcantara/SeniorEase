@@ -15,12 +15,27 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import HistoryList from "@/src/presentation/components/HistoryList";
 import { formatTimePtBR, formatDatePtBR } from "../helpers/formatDatePtBR";
 import getNextTask from "../helpers/getNextTask";
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
+import { useAuth } from "@/src/infrastructure/AuthContext";
+import { UserProfile } from "@/src/domain/entities/UserProfile";
+import { getUserProfileUseCase } from "@/src/infrastructure/container";
 import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
   const { config, salvarConfig } = useConfig();
   const simplificado = config.modoVisualizacao === "simplificada";
+  const { user } = useAuth()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return
+      const data = await getUserProfileUseCase.execute(user.id)
+      setProfile(data)
+    }
+    loadProfile()
+  }, [user])
 
   const dataHoje = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
@@ -56,6 +71,7 @@ function DashboardContent() {
   }, [open, editOpen]);
 
   return (
+    <PrivateRoute>
     <Box
       sx={{
         minHeight: "100vh",
@@ -82,7 +98,7 @@ function DashboardContent() {
                 : "var(--color-text-primary)",
             }}
           >
-            Olá, Usuário!
+            Olá, {profile ? `${profile.firstName} ${profile.lastName}` : "Usuário"}!
           </Typography>
 
           <FormControlLabel
@@ -184,18 +200,20 @@ function DashboardContent() {
               </Typography>
 
               <HistoryList tasks={tasks} />
+            </Grid>
+          )}
+        </Grid>
 
-              {open && (
-                <Grid {...{ item: true, width: "40%" }}>
-                  <Modal
-                    type="create"
-                    open={open}
-                    onClose={() => setOpen(!open)}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                  />
-                </Grid>
-              )}
+        {/* Modal Criar Tarefa */}
+        {open && (
+          <Modal
+            type="create"
+            open={open}
+            onClose={() => setOpen(false)}
+            tasks={tasks}
+            setTasks={setTasks}
+          />
+        )}
 
               {editOpen && (
                 <Grid {...{ item: true, width: "40%" }}>
@@ -211,11 +229,9 @@ function DashboardContent() {
                   />
                 </Grid>
               )}
-            </Grid>
-          )}
-        </Grid>
       </Container>
     </Box>
+    </PrivateRoute>
   );
 }
 

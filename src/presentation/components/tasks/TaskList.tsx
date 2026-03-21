@@ -54,12 +54,19 @@ export default function TaskList({
       }}
     >
       <CardContent sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            mb: 2,
+            color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          }}
+        >
           Minhas Tarefas
         </Typography>
 
         <Stack spacing={0}>
-          {sortedTasks.map((task: Task) => (
+          {tasks.map((task: Task) => (
             <TaskItem
               showEditButton={showEditButton}
               key={task.id}

@@ -13,6 +13,7 @@ import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
 import Divider from "@mui/material/Divider"
 import { ChevronDown, HelpCircle, BookOpen, MessageCircleQuestion, Phone, Mail, LifeBuoy } from "lucide-react"
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 
 const guiaSections = [
 	{
@@ -43,7 +44,12 @@ const guiaSections = [
 	{
 		titulo: "Diferença entre modo Simplificado e Avançado",
 		descricao:
-			"O modo Simplificado mostra apenas a lista de tarefas e o próximo compromisso, ideal para quem quer uma interface mais limpa. O modo Avançado exibe também as estatísticas semanais, o histórico de tarefas e botões de edição.",
+			"O modo Simplificado mostra apenas o essencial, com menos informações na tela. Ele é indicado para quem prefere uma navegação mais fácil e sem distrações. O modo Avançado exibe mais opções e detalhes, como estatísticas, edição de tarefas e outras funcionalidades. Ele é indicado para quem já tem mais familiaridade com o sistema.",
+	},
+	{
+		titulo: "Como usar a tela de Tarefas",
+		descricao:
+			'Na barra de navegação, clique em "Tarefas" para acessar a tela completa de gerenciamento. Lá você encontra duas abas: "Pendentes" com as tarefas a fazer e "Concluídas" com o histórico. No modo Avançado, você também pode usar o campo de busca para encontrar tarefas pelo nome, os botões de ordenação para organizar por data e o botão de editar em cada tarefa.',
 	},
 ]
 
@@ -66,7 +72,17 @@ const faqItems = [
 	{
 		pergunta: "Onde vejo as tarefas que já concluí?",
 		resposta:
-			'No modo Avançado, a seção "Histórico" aparece ao lado da lista de tarefas no Início. No modo Simplificado, o histórico não é exibido para manter a tela mais limpa. Você também pode acessar o histórico através da tela "Tarefas" localizada na barra de navegação.',
+			'Você pode ver as tarefas concluídas de duas formas: no Modo Avançado do Início, a seção "Histórico" aparece ao lado da lista de tarefas. Ou acesse a tela "Tarefas" na barra de navegação e clique na aba "Concluídas" para ver o histórico completo.',
+	},
+	{
+		pergunta: "Como busco uma tarefa específica?",
+		resposta:
+			'No modo Avançado, na tela "Tarefas", utilize o campo de busca no topo da página. Digite parte do nome da tarefa e a lista será filtrada automaticamente, tanto na aba de pendentes quanto na de concluídas. No modo Simplificado, o campo de busca não é exibido.',
+	},
+	{
+		pergunta: "Como ordeno as tarefas por data?",
+		resposta:
+			'No modo Avançado, na tela "Tarefas", ao lado do campo de busca, você encontra os botões "Mais antigas" e "Mais recentes". Clique em "Mais antigas" para ver primeiro as tarefas com datas mais próximas, ou em "Mais recentes" para ver as mais recentes no topo. No modo Simplificado, essa opção não é exibida.',
 	},
 	{
 		pergunta: "Como volto para a tela principal?",
@@ -91,6 +107,7 @@ function HelpContent() {
 	const accentColor = altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)"
 
 	return (
+		<PrivateRoute>
 		<Box
 			sx={{
 				minHeight: "100vh",
@@ -224,6 +241,7 @@ function HelpContent() {
 				</Card>
 			</Container>
 		</Box>
+		</PrivateRoute>
 	)
 }
 

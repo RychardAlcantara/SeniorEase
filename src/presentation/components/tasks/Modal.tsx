@@ -18,6 +18,7 @@ import {
   createTaskUseCase,
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
+import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
 export default function Modal({
   type,
@@ -28,6 +29,8 @@ export default function Modal({
   setTasks,
 }: ModalProps) {
   dayjs.locale("pt-br");
+
+  const { altoContraste } = useContraste();
 
   const [title, setTitle] = useState(selectedTask?.title ?? "");
   const [notes, setNotes] = useState(selectedTask?.notes ?? "");
@@ -90,10 +93,37 @@ export default function Modal({
   const disableInputs = saving || !!successMessage;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{modalTitle}</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      PaperProps={{
+        sx: {
+          backgroundColor: altoContraste
+            ? "var(--color-hc-bg)"
+            : "var(--color-bg-card)",
+          color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          border: altoContraste ? "2px solid var(--color-hc-accent)" : "none",
+          transition: "all 0.3s ease",
+        },
+      }}
+    >
+      <DialogTitle
+        sx={{
+          color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          fontWeight: 700,
+        }}
+      >
+        {modalTitle}
+      </DialogTitle>
 
-      <DialogContent dividers>
+      <DialogContent
+        dividers
+        sx={{
+          borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+        }}
+      >
         <Stack spacing={2}>
           {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
@@ -103,6 +133,20 @@ export default function Modal({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={disableInputs}
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: altoContraste ? "var(--color-hc-text)" : undefined,
+              },
+              "& .MuiOutlinedInput-root": {
+                color: altoContraste ? "var(--color-hc-text)" : undefined,
+                "& fieldset": {
+                  borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+                },
+                "&:hover fieldset": {
+                  borderColor: altoContraste ? "var(--color-hc-text)" : undefined,
+                },
+              },
+            }}
           />
           <TextField
             label="Observações"
@@ -112,6 +156,20 @@ export default function Modal({
             multiline
             minRows={3}
             disabled={disableInputs}
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: altoContraste ? "var(--color-hc-text)" : undefined,
+              },
+              "& .MuiOutlinedInput-root": {
+                color: altoContraste ? "var(--color-hc-text)" : undefined,
+                "& fieldset": {
+                  borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+                },
+                "&:hover fieldset": {
+                  borderColor: altoContraste ? "var(--color-hc-text)" : undefined,
+                },
+              },
+            }}
           />
           <DateTimePicker
             label="Para quando é a tarefa?"
@@ -119,10 +177,102 @@ export default function Modal({
             onChange={(newValue) => setToDoDate(newValue)}
             format="DD/MM/YYYY HH:mm"
             ampm={false}
+            enableAccessibleFieldDOMStructure={false}
+            slots={{
+              textField: (params) => (
+                <TextField
+                  {...params}
+                  placeholder="dd/mm/aaaa hh:mm"
+                  fullWidth
+                  disabled={disableInputs}
+                  inputProps={{ ...params.inputProps, inputMode: "numeric" }}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                      "& fieldset": {
+                        borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                      },
+                    },
+                    "& .MuiIconButton-root": {
+                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                    },
+                  }}
+                />
+              ),
+            }}
             slotProps={{
-              desktopPaper: { sx: { zIndex: 1600 } }, // acima do Dialog
+              desktopPaper: {
+                sx: {
+                  zIndex: 1600,
+                  backgroundColor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-card)",
+                  color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                  border: altoContraste ? "2px solid var(--color-hc-accent)" : undefined,
+                  "& .MuiPickersDay-root": {
+                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                    "&.Mui-selected": {
+                      backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                      color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+                    },
+                    "&:hover": {
+                      backgroundColor: altoContraste ? "rgba(26,235,255,0.2)" : undefined,
+                    },
+                  },
+                  "& .MuiDayCalendar-weekDayLabel": {
+                    color: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-secondary)",
+                  },
+                  "& .MuiPickersCalendarHeader-label": {
+                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                  },
+                  "& .MuiIconButton-root": {
+                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                  },
+                  "& .MuiClock-pin, & .MuiClockPointer-root": {
+                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                  },
+                  "& .MuiClockPointer-thumb": {
+                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                  },
+                  "& .MuiClockNumber-root": {
+                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                    "&.Mui-selected": {
+                      color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+                    },
+                  },
+                  "& .MuiClock-clock": {
+                    backgroundColor: altoContraste ? "rgba(26,235,255,0.08)" : undefined,
+                  },
+                  "& .MuiPickersLayout-actionBar .MuiButton-root": {
+                    color: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                  },
+                  "& .MuiTabs-root .MuiTab-root": {
+                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                    "&.Mui-selected": {
+                      color: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    },
+                  },
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                  },
+                  "& .MuiDivider-root, & hr": {
+                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                  },
+                  "& .MuiPickersLayout-contentWrapper": {
+                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                  },
+                },
+              },
               popper: {
-                disablePortal: false, // garante portal
+                disablePortal: false,
                 modifiers: [
                   {
                     name: "preventOverflow",
@@ -134,18 +284,24 @@ export default function Modal({
                   },
                 ],
               },
-              textField: {
-                placeholder: "dd/mm/aaaa hh:mm",
-                inputProps: { inputMode: "numeric" },
-              },
             }}
             disabled={disableInputs}
           />
         </Stack>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose} color="inherit" disabled={disableInputs}>
+      <DialogActions
+        sx={{
+          borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+        }}
+      >
+        <Button
+          onClick={onClose}
+          disabled={disableInputs}
+          sx={{
+            color: altoContraste ? "var(--color-hc-text)" : "inherit",
+          }}
+        >
           Fechar
         </Button>
         <Button
@@ -153,6 +309,20 @@ export default function Modal({
           onClick={onSave}
           disabled={!title.trim() || !toDoDate || disableInputs}
           startIcon={saving ? <CircularProgress size={16} /> : null}
+          sx={{
+            backgroundImage: altoContraste ? "none" : "var(--gradient-button)",
+            backgroundColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+            color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+            "&:hover": {
+              backgroundImage: altoContraste ? "none" : "var(--gradient-button-hover)",
+              backgroundColor: altoContraste ? "#15c4d9" : undefined,
+            },
+            "&.Mui-disabled": {
+              backgroundImage: "none",
+              backgroundColor: altoContraste ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)",
+              color: altoContraste ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.26)",
+            },
+          }}
         >
           {saving ? "Salvando..." : "Salvar"}
         </Button>

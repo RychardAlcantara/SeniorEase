@@ -16,6 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel"
 import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
 import { useState, useEffect, useRef } from "react"
+import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 
 const fontSizeMap = ["14px", "16px", "20px"]
 const letterSpacingMap: Record<string, string> = { normal: "0px", ampliado: "1px" }
@@ -130,6 +131,7 @@ function SettingsContent() {
   }
 
   return (
+	<PrivateRoute>
 	<Box
 	  sx={{
 			minHeight: "100vh",
@@ -305,6 +307,7 @@ function SettingsContent() {
 			</Snackbar>
 	  </Container>
 	</Box>
+	</PrivateRoute>
   )
 }
 
