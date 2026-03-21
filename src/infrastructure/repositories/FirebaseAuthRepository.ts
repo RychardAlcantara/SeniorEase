@@ -4,6 +4,9 @@ import {
   sendPasswordResetEmail,
   signOut,
   updateProfile,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth"
 import { auth } from "../firebase"
 import { AuthRepository } from "../../domain/repositories/AuthRepository"
@@ -60,6 +63,21 @@ export class FirebaseAuthRepository implements AuthRepository {
       await sendPasswordResetEmail(auth, email)
     } catch (error: any) {
       throw new Error(mapFirebaseError(error.code))
+    }
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    try {
+      const user = auth.currentUser
+      if (!user || !user.email) throw new Error("Usuário não autenticado.")
+
+      // Reautentica antes de trocar a senha (exigido pelo Firebase)
+      const credential = EmailAuthProvider.credential(user.email, currentPassword)
+      await reauthenticateWithCredential(user, credential)
+      await updatePassword(user, newPassword)
+    } catch (error: any) {
+      if (error.code) throw new Error(mapFirebaseError(error.code))
+      throw error
     }
   }
 
