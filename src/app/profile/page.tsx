@@ -19,6 +19,7 @@ import {
   changePasswordUseCase,
 } from "@/src/infrastructure/container"
 import { UserProfile } from "@/src/domain/entities/UserProfile"
+import Navbar from "@/src/presentation/components/Navbar"
 
 export default function ProfilePage() {
   const { user } = useAuth()
@@ -115,23 +116,15 @@ export default function ProfilePage() {
   return (
     <PrivateRoute>
       <Box minHeight="100vh" bgcolor="grey.100">
-        <Container maxWidth="sm" sx={{ py: 6 }}>
- 
-          <Button
-            component={Link}
-            href="/dashboard"
-            startIcon={<ArrowBack />}
-            sx={{ mb: 3, textTransform: "none", color: "#1565c0" }}
-          >
-            Voltar ao Dashboard
-          </Button>
+        <Navbar />
+        <Container maxWidth="sm" sx={{ py: 3 }}>
  
           <Paper elevation={3} sx={{ borderRadius: 3, overflow: "hidden" }}>
  
             {/* Header do card */}
             <Box
               sx={{
-                background: "linear-gradient(to right, #1565c0, #0d47a1)",
+                background: "var(--gradient-navbar)",
                 px: 5, pt: 4, pb: 0,
               }}
             >
