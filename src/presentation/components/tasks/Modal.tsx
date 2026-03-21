@@ -11,9 +11,13 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
+import {
+  createTaskUseCase,
+  updateTaskUseCase,
+} from "@/src/infrastructure/container";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 
 export default function Modal({
@@ -38,14 +42,13 @@ export default function Modal({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  function onSave() {
+  async function onSave() {
     if (!tasks || !setTasks) return;
 
     setSaving(true);
-
     if (type === "create") {
       const newTask = {
-        id: tasks.length.toString(),
+        id: crypto.randomUUID(),
         title: title.trim(),
         notes: notes.trim(),
         expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
@@ -53,21 +56,27 @@ export default function Modal({
         completed: false,
         concludedAt: null,
       };
-      setTasks([...tasks, newTask]);
-      setSuccessMessage("Tarefa adicionada com sucesso!");
+      try {
+        await createTaskUseCase.execute(newTask);
+        setSuccessMessage("Tarefa adicionada com sucesso!");
+      } catch {
+        setSuccessMessage("Ocorreu um erro ao adicionar a tarefa.");
+      }
     } else if (type === "edit" && selectedTask) {
-      const updated = tasks.map((t) =>
-        t.id === selectedTask.id
-          ? {
-              ...t,
-              title: title.trim(),
-              notes: notes.trim(),
-              expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
-            }
-          : t,
-      );
-      setTasks(updated);
-      setSuccessMessage("Tarefa editada com sucesso!");
+      try {
+        const taskToUpdate = {
+          ...selectedTask,
+          title: title.trim(),
+          notes: notes.trim(),
+          expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
+        };
+
+        await updateTaskUseCase.execute(taskToUpdate);
+
+        setSuccessMessage("Tarefa editada com sucesso!");
+      } catch {
+        setSuccessMessage("Ocorreu um erro ao editar a tarefa.");
+      }
     } else {
       setSaving(false);
       return;

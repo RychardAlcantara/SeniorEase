@@ -5,5 +5,5 @@ export default interface Task {
   createdAt: Date;
   expectedToBeDone: string | null;
   concludedAt: Date | null;
-  notes?: string;
+  notes?: string | null;
 }

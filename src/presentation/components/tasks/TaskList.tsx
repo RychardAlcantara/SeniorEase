@@ -9,15 +9,37 @@ import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 export default function TaskList({
   showEditButton,
   setEditOpen,
+  setSelectedTaskId,
   setTasks,
   tasks,
 }: {
   showEditButton?: boolean;
   setEditOpen: (open: boolean) => void;
+  setSelectedTaskId: (id: string | null) => void;
   setTasks: Dispatch<SetStateAction<Task[]>>;
   tasks: Task[];
 }) {
   const { altoContraste } = useContraste();
+
+  const sortedTasks = tasks
+    .filter((t) => !t.completed)
+    .sort((a, b) => {
+      const ta = a.expectedToBeDone
+        ? new Date(a.expectedToBeDone as string).getTime()
+        : Infinity;
+      const tb = b.expectedToBeDone
+        ? new Date(b.expectedToBeDone as string).getTime()
+        : Infinity;
+
+      // Valores inválidos vão para o final
+      const aValid = Number.isFinite(ta);
+      const bValid = Number.isFinite(tb);
+      if (!aValid && !bValid) return 0;
+      if (!aValid) return 1;
+      if (!bValid) return -1;
+
+      return ta - tb; // crescente
+    });
 
   return (
     <Card
@@ -50,6 +72,7 @@ export default function TaskList({
               key={task.id}
               task={task}
               setOpen={setEditOpen}
+              setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
               tasks={tasks}
             />

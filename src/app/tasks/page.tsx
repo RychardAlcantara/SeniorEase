@@ -1,10 +1,10 @@
 "use client";
 
 import Navbar from "@/src/presentation/components/Navbar";
-import TaskList from "@/src/presentation/components/TaskList";
+import TaskList from "@/src/presentation/components/tasks/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import HistoryList from "@/src/presentation/components/HistoryList";
-import Modal from "@/src/presentation/components/Modal";
+import Modal from "@/src/presentation/components/tasks/Modal";
 import { useState } from "react";
 import {
   Box,

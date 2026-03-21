@@ -1,13 +1,13 @@
 "use client";
 
 import Navbar from "@/src/presentation/components/Navbar";
-import TaskList from "@/src/presentation/components/TaskList";
+import TaskList from "@/src/presentation/components/tasks/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import { useEffect, useState } from "react";
 import { Box, Grid, Switch, Stack, Container, Typography } from "@mui/material";
 import Task from "@/src/domain/entities/Task";
-import Modal from "@/src/presentation/components/Modal";
-import NextTaskCard from "@/src/presentation/components/NextTaskCard";
+import Modal from "@/src/presentation/components/tasks/Modal";
+import NextTaskCard from "@/src/presentation/components/tasks/NextTaskCard";
 import WeeklyStatsCard from "@/src/presentation/components/WeeklyStatsCard";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useConfig } from "@/src/presentation/contexts/ConfigContext";
@@ -19,6 +19,7 @@ import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
 import { useAuth } from "@/src/infrastructure/AuthContext";
 import { UserProfile } from "@/src/domain/entities/UserProfile";
 import { getUserProfileUseCase } from "@/src/infrastructure/container";
+import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 function DashboardContent() {
   const { altoContraste, setAltoContraste } = useContraste();
@@ -43,6 +44,7 @@ function DashboardContent() {
   });
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const tarefasHoje = tasks.filter((t) => {
     if (!t.expectedToBeDone) return false;
@@ -54,6 +56,19 @@ function DashboardContent() {
   const nextTitle = next?.task.title ?? "Sem próximas tarefas";
   const nextTime = next ? formatTimePtBR(next.date) : "-";
   const nextDate = next ? formatDatePtBR(next.date) : "-";
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const all = await getAllTasksUseCase.execute();
+        setTasks(all);
+      } catch (err) {
+        console.error("Erro ao carregar tarefas:", err);
+      }
+    };
+
+    loadTasks();
+  }, [open, editOpen]);
 
   return (
     <PrivateRoute>
@@ -161,15 +176,9 @@ function DashboardContent() {
             <TaskList
               showEditButton={!simplificado}
               setEditOpen={setEditOpen}
+              setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
-              tasks={tasks
-                .filter((t) => !t.completed)
-                .slice()
-                .sort((a, b) => {
-                  const da = a.expectedToBeDone ? new Date(a.expectedToBeDone).getTime() : Infinity;
-                  const db = b.expectedToBeDone ? new Date(b.expectedToBeDone).getTime() : Infinity;
-                  return da - db;
-                })}
+              tasks={tasks}
             />
 
             <CreateTaskButton onClick={() => setOpen(true)} />
@@ -206,19 +215,20 @@ function DashboardContent() {
           />
         )}
 
-        {/* Modal Editar Tarefa */}
-        {editOpen && (
-          <Modal
-            type="edit"
-            open={editOpen}
-            onClose={() => setEditOpen(false)}
-            selectedTask={tasks.find(
-              (t) => t.id === tasks[tasks.length - 1].id,
-            )}
-            tasks={tasks}
-            setTasks={setTasks}
-          />
-        )}
+              {editOpen && (
+                <Grid {...{ item: true, width: "40%" }}>
+                  <Modal
+                    type="edit"
+                    open={editOpen}
+                    onClose={() => setEditOpen(!editOpen)}
+                    selectedTask={
+                      tasks.find((t) => t.id === selectedTaskId) || undefined
+                    }
+                    tasks={tasks}
+                    setTasks={setTasks}
+                  />
+                </Grid>
+              )}
       </Container>
     </Box>
     </PrivateRoute>
