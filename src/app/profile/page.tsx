@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import {
   Box, Container, Paper, Typography,
   TextField, Button, CircularProgress, Divider, Tab, Tabs
@@ -21,8 +22,9 @@ import { UserProfile } from "@/src/domain/entities/UserProfile"
 
 export default function ProfilePage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [tab, setTab] = useState(0)
-
+ 
   // --- estado do perfil ---
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -33,7 +35,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [profileError, setProfileError] = useState("")
   const [profileSuccess, setProfileSuccess] = useState("")
-
+ 
   // --- estado da senha ---
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -41,7 +43,7 @@ export default function ProfilePage() {
   const [changingPassword, setChangingPassword] = useState(false)
   const [passwordError, setPasswordError] = useState("")
   const [passwordSuccess, setPasswordSuccess] = useState("")
-
+ 
   useEffect(() => {
     async function loadProfile() {
       if (!user) return
@@ -55,18 +57,18 @@ export default function ProfilePage() {
     }
     loadProfile()
   }, [user])
-
+ 
   function handleFileSelect(file: File) {
     setPhotoFile(file)
     setPreviewURL(URL.createObjectURL(file))
   }
-
+ 
   function handleRemovePhoto() {
     setPhotoFile(undefined)
     setPreviewURL(undefined)
     setPhotoURL(undefined)
   }
-
+ 
   async function handleSaveProfile() {
     if (!user) return
     setProfileError("")
@@ -81,15 +83,16 @@ export default function ProfilePage() {
         photoURL,
       }
       await saveUserProfileUseCase.execute(profile, photoFile)
-      setProfileSuccess("Perfil atualizado com sucesso!")
       setPhotoFile(undefined)
+      setProfileSuccess("Perfil atualizado com sucesso!")
+      setTimeout(() => router.push("/dashboard"), 3000)
     } catch (err: any) {
       setProfileError(err.message)
     } finally {
       setSaving(false)
     }
   }
-
+ 
   async function handleChangePassword() {
     setPasswordError("")
     setPasswordSuccess("")
@@ -106,30 +109,30 @@ export default function ProfilePage() {
       setChangingPassword(false)
     }
   }
-
+ 
   const initials = `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`.toUpperCase() || "?"
-
+ 
   return (
     <PrivateRoute>
       <Box minHeight="100vh" bgcolor="grey.100">
-        <Container maxWidth="sm" sx={{ py: 2 }}>
-
+        <Container maxWidth="sm" sx={{ py: 6 }}>
+ 
           <Button
             component={Link}
             href="/dashboard"
             startIcon={<ArrowBack />}
-            sx={{ mb: 1, textTransform: "none", color: "#1565c0" }}
+            sx={{ mb: 3, textTransform: "none", color: "#1565c0" }}
           >
             Voltar ao Dashboard
           </Button>
-
+ 
           <Paper elevation={3} sx={{ borderRadius: 3, overflow: "hidden" }}>
-
+ 
             {/* Header do card */}
             <Box
               sx={{
                 background: "linear-gradient(to right, #1565c0, #0d47a1)",
-                px: 5, pt: 2, pb: 0,
+                px: 5, pt: 4, pb: 0,
               }}
             >
               <Typography variant="h5" fontWeight="bold" color="white" mb={0.5}>
@@ -138,7 +141,7 @@ export default function ProfilePage() {
               <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.75)" }} mb={2}>
                 Gerencie suas informações pessoais e segurança
               </Typography>
-
+ 
               <Tabs
                 value={tab}
                 onChange={(_, v) => setTab(v)}
@@ -150,7 +153,7 @@ export default function ProfilePage() {
                 <Tab icon={<Lock fontSize="small" />} iconPosition="start" label="Alterar Senha" />
               </Tabs>
             </Box>
-
+ 
             {/* Conteúdo */}
             <Box p={5}>
               {loading ? (
@@ -162,10 +165,10 @@ export default function ProfilePage() {
                   {/* Aba - Dados Pessoais */}
                   {tab === 0 && (
                     <Box display="flex" flexDirection="column" gap={3}>
-
+ 
                       {profileError && <AlertMessage type="error" message={profileError} />}
                       {profileSuccess && <AlertMessage type="success" message={profileSuccess} />}
-
+ 
                       <Box display="flex" justifyContent="center">
                         <PhotoUpload
                           currentPhotoURL={photoURL}
@@ -175,9 +178,9 @@ export default function ProfilePage() {
                           onRemove={handleRemovePhoto}
                         />
                       </Box>
-
+ 
                       <Divider />
-
+ 
                       <TextField
                         label="E-mail"
                         value={user?.email ?? ""}
@@ -186,7 +189,7 @@ export default function ProfilePage() {
                         variant="outlined"
                         helperText="O e-mail não pode ser alterado"
                       />
-
+ 
                       <TextField
                         label="Nome"
                         placeholder="Digite seu nome"
@@ -195,7 +198,7 @@ export default function ProfilePage() {
                         fullWidth
                         variant="outlined"
                       />
-
+ 
                       <TextField
                         label="Sobrenome"
                         placeholder="Digite seu sobrenome"
@@ -204,7 +207,7 @@ export default function ProfilePage() {
                         fullWidth
                         variant="outlined"
                       />
-
+ 
                       <Button
                         variant="contained"
                         size="large"
@@ -219,42 +222,42 @@ export default function ProfilePage() {
                       >
                         {saving ? "Salvando..." : "Salvar Alterações"}
                       </Button>
-
+ 
                     </Box>
                   )}
-
+ 
                   {/* Aba - Alterar Senha */}
                   {tab === 1 && (
                     <Box display="flex" flexDirection="column" gap={3}>
-
+ 
                       {passwordError && <AlertMessage type="error" message={passwordError} />}
                       {passwordSuccess && <AlertMessage type="success" message={passwordSuccess} />}
-
+ 
                       <Typography variant="body2" color="text.secondary">
                         Para sua segurança, informe a senha atual antes de definir uma nova.
                       </Typography>
-
+ 
                       <PasswordInput
                         label="Senha atual"
                         placeholder="Digite sua senha atual"
                         value={currentPassword}
                         onChange={setCurrentPassword}
                       />
-
+ 
                       <PasswordInput
                         label="Nova senha"
                         placeholder="Digite a nova senha"
                         value={newPassword}
                         onChange={setNewPassword}
                       />
-
+ 
                       <PasswordInput
                         label="Confirmar nova senha"
                         placeholder="Confirme a nova senha"
                         value={confirmPassword}
                         onChange={setConfirmPassword}
                       />
-
+ 
                       <Button
                         variant="contained"
                         size="large"
@@ -269,14 +272,14 @@ export default function ProfilePage() {
                       >
                         {changingPassword ? "Alterando..." : "Alterar Senha"}
                       </Button>
-
+ 
                     </Box>
                   )}
                 </>
               )}
             </Box>
           </Paper>
-
+ 
         </Container>
       </Box>
     </PrivateRoute>
