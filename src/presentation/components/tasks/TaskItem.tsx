@@ -3,7 +3,6 @@
 import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
-import dayjs from "dayjs";
 import {
   deleteTaskUseCase,
   updateTaskUseCase,
@@ -11,6 +10,10 @@ import {
 import Task from "@/src/domain/entities/Task";
 import { useState } from "react";
 import DeleteModal from "./ModalDelete";
+import {
+  formatDatePtBR,
+  formatTimePtBR,
+} from "@/src/app/helpers/formatDatePtBR";
 
 export default function TaskItem({
   task,
@@ -67,8 +70,9 @@ export default function TaskItem({
       setDeleting(false);
     }
   }
+
   const formattedDateTime = task.expectedToBeDone
-    ? dayjs(task.expectedToBeDone).format("ddd, DD [de] MMM [•] HH:mm")
+    ? `${formatDatePtBR(new Date(task.expectedToBeDone))} • ${formatTimePtBR(new Date(task.expectedToBeDone))}`
     : null;
 
   return (
