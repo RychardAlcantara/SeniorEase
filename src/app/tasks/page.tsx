@@ -5,7 +5,7 @@ import TaskList from "@/src/presentation/components/tasks/TaskList";
 import CreateTaskButton from "@/src/presentation/components/CreateTaskButton";
 import HistoryList from "@/src/presentation/components/HistoryList";
 import Modal from "@/src/presentation/components/tasks/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Switch,
@@ -25,6 +25,7 @@ import Task from "@/src/domain/entities/Task";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useConfig } from "@/src/presentation/contexts/ConfigContext";
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
+import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 function TasksContent() {
   const { altoContraste, setAltoContraste } = useContraste();
@@ -38,24 +39,45 @@ function TasksContent() {
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<"asc" | "desc">("asc");
 
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const all = await getAllTasksUseCase.execute();
+        setTasks(all);
+      } catch (err) {
+        console.error("Erro ao carregar tarefas:", err);
+      }
+    };
+
+    loadTasks();
+  }, []);
+
   const pendentes = tasks.filter((t) => !t.completed);
   const filtro = busca.trim().toLowerCase();
 
   function ordenarPorData(lista: Task[]) {
     return lista.slice().sort((a, b) => {
-      const da = a.expectedToBeDone ? new Date(a.expectedToBeDone).getTime() : Infinity;
-      const db = b.expectedToBeDone ? new Date(b.expectedToBeDone).getTime() : Infinity;
+      const da = a.expectedToBeDone
+        ? new Date(a.expectedToBeDone).getTime()
+        : Infinity;
+      const db = b.expectedToBeDone
+        ? new Date(b.expectedToBeDone).getTime()
+        : Infinity;
       return ordenacao === "asc" ? da - db : db - da;
     });
   }
 
   const pendentesFiltradas = ordenarPorData(
-    filtro ? pendentes.filter((t) => t.title.toLowerCase().includes(filtro)) : pendentes
+    filtro
+      ? pendentes.filter((t) => t.title.toLowerCase().includes(filtro))
+      : pendentes,
   );
   const concluidasFiltradas = ordenarPorData(
     filtro
-      ? tasks.filter((t) => t.completed && t.title.toLowerCase().includes(filtro))
-      : tasks.filter((t) => t.completed)
+      ? tasks.filter(
+          (t) => t.completed && t.title.toLowerCase().includes(filtro),
+        )
+      : tasks.filter((t) => t.completed),
   );
 
   return (
@@ -124,99 +146,111 @@ function TasksContent() {
           </Box>
 
           {!simplificado && (
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3, width: "100%" }}>
-            <TextField
-              placeholder="Buscar tarefas..."
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon
-                        sx={{
-                          color: altoContraste
-                            ? "var(--color-hc-text)"
-                            : "var(--color-text-secondary)",
-                        }}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={{
-                flex: 1,
-                minWidth: 0,
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                  backgroundColor: altoContraste
-                    ? "var(--color-hc-bg)"
-                    : "var(--color-bg-card)",
-                  color: altoContraste ? "var(--color-hc-text)" : undefined,
-                  "& fieldset": {
-                    borderColor: altoContraste
-                      ? "var(--color-hc-accent)"
-                      : undefined,
-                  },
-                  "&:hover fieldset": {
-                    borderColor: altoContraste
-                      ? "var(--color-hc-text)"
-                      : undefined,
-                  },
-                },
-              }}
-            />
-
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ flexShrink: 0 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  whiteSpace: "nowrap",
-                  color: altoContraste
-                    ? "var(--color-hc-text)"
-                    : "var(--color-text-secondary)",
-                }}
-              >
-                Ordenar por:
-              </Typography>
-              <ToggleButtonGroup
-                value={ordenacao}
-                exclusive
-                onChange={(_, v) => { if (v) setOrdenacao(v); }}
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              sx={{ mb: 3, width: "100%" }}
+            >
+              <TextField
+                placeholder="Buscar tarefas..."
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
                 size="small"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon
+                          sx={{
+                            color: altoContraste
+                              ? "var(--color-hc-text)"
+                              : "var(--color-text-secondary)",
+                          }}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
                 sx={{
-                  "& .MuiToggleButton-root": {
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "0.8rem",
-                    borderColor: altoContraste
-                      ? "var(--color-hc-accent)"
-                      : undefined,
-                    color: altoContraste
-                      ? "var(--color-hc-text)"
-                      : "var(--color-text-secondary)",
-                    "&.Mui-selected": {
-                      backgroundColor: altoContraste
+                  flex: 1,
+                  minWidth: 0,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "12px",
+                    backgroundColor: altoContraste
+                      ? "var(--color-hc-bg)"
+                      : "var(--color-bg-card)",
+                    color: altoContraste ? "var(--color-hc-text)" : undefined,
+                    "& fieldset": {
+                      borderColor: altoContraste
                         ? "var(--color-hc-accent)"
-                        : "var(--color-primary)",
-                      color: altoContraste
-                        ? "var(--color-hc-bg)"
-                        : "var(--color-text-white)",
-                      "&:hover": {
-                        backgroundColor: altoContraste
-                          ? "#15c4d9"
-                          : undefined,
-                      },
+                        : undefined,
+                    },
+                    "&:hover fieldset": {
+                      borderColor: altoContraste
+                        ? "var(--color-hc-text)"
+                        : undefined,
                     },
                   },
                 }}
+              />
+
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                sx={{ flexShrink: 0 }}
               >
-                <ToggleButton value="asc">Mais antigas</ToggleButton>
-                <ToggleButton value="desc">Mais recentes</ToggleButton>
-              </ToggleButtonGroup>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    whiteSpace: "nowrap",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-secondary)",
+                  }}
+                >
+                  Ordenar por:
+                </Typography>
+                <ToggleButtonGroup
+                  value={ordenacao}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v) setOrdenacao(v);
+                  }}
+                  size="small"
+                  sx={{
+                    "& .MuiToggleButton-root": {
+                      textTransform: "none",
+                      fontWeight: 600,
+                      fontSize: "0.8rem",
+                      borderColor: altoContraste
+                        ? "var(--color-hc-accent)"
+                        : undefined,
+                      color: altoContraste
+                        ? "var(--color-hc-text)"
+                        : "var(--color-text-secondary)",
+                      "&.Mui-selected": {
+                        backgroundColor: altoContraste
+                          ? "var(--color-hc-accent)"
+                          : "var(--color-primary)",
+                        color: altoContraste
+                          ? "var(--color-hc-bg)"
+                          : "var(--color-text-white)",
+                        "&:hover": {
+                          backgroundColor: altoContraste
+                            ? "#15c4d9"
+                            : undefined,
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <ToggleButton value="asc">Mais antigas</ToggleButton>
+                  <ToggleButton value="desc">Mais recentes</ToggleButton>
+                </ToggleButtonGroup>
+              </Stack>
             </Stack>
-          </Stack>
           )}
 
           <Tabs
@@ -251,15 +285,14 @@ function TasksContent() {
           {tab === 0 && (
             <TaskList
               showEditButton={!simplificado}
+              setSelectedTaskId={() => {}}
               setEditOpen={setEditOpen}
               setTasks={setTasks}
               tasks={pendentesFiltradas}
             />
           )}
 
-          {tab === 1 && (
-            <HistoryList tasks={concluidasFiltradas} />
-          )}
+          {tab === 1 && <HistoryList tasks={concluidasFiltradas} />}
 
           {/* Modal Criar Tarefa */}
           {open && (
