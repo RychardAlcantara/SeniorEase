@@ -19,6 +19,7 @@ export default function TaskItem({
   setSelectedTaskId,
   setTasks,
   showEditButton = true,
+  onDeleteSuccess,
 }: TaskItemProps) {
   const { altoContraste } = useContraste();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -57,6 +58,7 @@ export default function TaskItem({
     try {
       await deleteTaskUseCase.execute(task.id);
       setConfirmOpen(false);
+      onDeleteSuccess?.();
     } catch (e) {
       console.error("Erro ao excluir tarefa:", e);
       // Reverte estado em caso de falha

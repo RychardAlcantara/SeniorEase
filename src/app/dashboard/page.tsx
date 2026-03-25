@@ -70,6 +70,15 @@ function DashboardContent() {
     loadTasks();
   }, [open, editOpen]);
 
+  const reloadTasks = async () => {
+    try {
+      const all = await getAllTasksUseCase.execute();
+      setTasks(all);
+    } catch (err) {
+      console.error("Erro ao recarregar tarefas:", err);
+    }
+  };
+
   return (
     <PrivateRoute>
       <Box
@@ -186,6 +195,7 @@ function DashboardContent() {
                 setSelectedTaskId={setSelectedTaskId}
                 setTasks={setTasks}
                 tasks={tasks}
+                onDeleteSuccess={reloadTasks}
               />
 
               <CreateTaskButton onClick={() => setOpen(true)} />

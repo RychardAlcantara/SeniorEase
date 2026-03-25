@@ -12,12 +12,14 @@ export default function TaskList({
   setSelectedTaskId,
   setTasks,
   tasks,
+  onDeleteSuccess,
 }: {
   showEditButton?: boolean;
   setEditOpen: (open: boolean) => void;
   setSelectedTaskId: (id: string | null) => void;
   setTasks: Dispatch<SetStateAction<Task[]>>;
   tasks: Task[];
+  onDeleteSuccess?: () => void;
 }) {
   const { altoContraste } = useContraste();
 
@@ -74,7 +76,8 @@ export default function TaskList({
               setOpen={setEditOpen}
               setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
-              tasks={sortedTasks}
+              tasks={tasks}
+              onDeleteSuccess={onDeleteSuccess}
             />
           ))}
         </Stack>
