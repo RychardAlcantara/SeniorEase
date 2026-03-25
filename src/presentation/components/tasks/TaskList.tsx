@@ -66,7 +66,7 @@ export default function TaskList({
         </Typography>
 
         <Stack spacing={0}>
-          {tasks.map((task: Task) => (
+          {sortedTasks.map((task: Task) => (
             <TaskItem
               showEditButton={showEditButton}
               key={task.id}
@@ -74,7 +74,7 @@ export default function TaskList({
               setOpen={setEditOpen}
               setSelectedTaskId={setSelectedTaskId}
               setTasks={setTasks}
-              tasks={tasks}
+              tasks={sortedTasks}
             />
           ))}
         </Stack>

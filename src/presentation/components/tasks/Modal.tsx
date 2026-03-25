@@ -11,7 +11,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -58,6 +58,7 @@ export default function Modal({
       };
       try {
         await createTaskUseCase.execute(newTask);
+
         setSuccessMessage("Tarefa adicionada com sucesso!");
       } catch {
         setSuccessMessage("Ocorreu um erro ao adicionar a tarefa.");
@@ -72,7 +73,6 @@ export default function Modal({
         };
 
         await updateTaskUseCase.execute(taskToUpdate);
-
         setSuccessMessage("Tarefa editada com sucesso!");
       } catch {
         setSuccessMessage("Ocorreu um erro ao editar a tarefa.");
@@ -140,10 +140,14 @@ export default function Modal({
               "& .MuiOutlinedInput-root": {
                 color: altoContraste ? "var(--color-hc-text)" : undefined,
                 "& fieldset": {
-                  borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+                  borderColor: altoContraste
+                    ? "var(--color-hc-accent)"
+                    : undefined,
                 },
                 "&:hover fieldset": {
-                  borderColor: altoContraste ? "var(--color-hc-text)" : undefined,
+                  borderColor: altoContraste
+                    ? "var(--color-hc-text)"
+                    : undefined,
                 },
               },
             }}
@@ -163,10 +167,14 @@ export default function Modal({
               "& .MuiOutlinedInput-root": {
                 color: altoContraste ? "var(--color-hc-text)" : undefined,
                 "& fieldset": {
-                  borderColor: altoContraste ? "var(--color-hc-accent)" : undefined,
+                  borderColor: altoContraste
+                    ? "var(--color-hc-accent)"
+                    : undefined,
                 },
                 "&:hover fieldset": {
-                  borderColor: altoContraste ? "var(--color-hc-text)" : undefined,
+                  borderColor: altoContraste
+                    ? "var(--color-hc-text)"
+                    : undefined,
                 },
               },
             }}
@@ -188,22 +196,34 @@ export default function Modal({
                   inputProps={{ ...params.inputProps, inputMode: "numeric" }}
                   sx={{
                     "& .MuiInputLabel-root": {
-                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                      color: altoContraste
+                        ? "var(--color-hc-text)"
+                        : "var(--color-text-secondary)",
                     },
                     "& .MuiOutlinedInput-root": {
-                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                      color: altoContraste
+                        ? "var(--color-hc-text)"
+                        : "var(--color-text-primary)",
                       "& fieldset": {
-                        borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                        borderColor: altoContraste
+                          ? "var(--color-hc-accent)"
+                          : "var(--color-text-light)",
                       },
                       "&:hover fieldset": {
-                        borderColor: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                        borderColor: altoContraste
+                          ? "var(--color-hc-text)"
+                          : "var(--color-text-primary)",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                        borderColor: altoContraste
+                          ? "var(--color-hc-accent)"
+                          : "var(--color-primary)",
                       },
                     },
                     "& .MuiIconButton-root": {
-                      color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                      color: altoContraste
+                        ? "var(--color-hc-text)"
+                        : "var(--color-text-secondary)",
                     },
                   }}
                 />
@@ -213,61 +233,105 @@ export default function Modal({
               desktopPaper: {
                 sx: {
                   zIndex: 1600,
-                  backgroundColor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-card)",
-                  color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
-                  border: altoContraste ? "2px solid var(--color-hc-accent)" : undefined,
+                  backgroundColor: altoContraste
+                    ? "var(--color-hc-bg)"
+                    : "var(--color-bg-card)",
+                  color: altoContraste
+                    ? "var(--color-hc-text)"
+                    : "var(--color-text-primary)",
+                  border: altoContraste
+                    ? "2px solid var(--color-hc-accent)"
+                    : undefined,
                   "& .MuiPickersDay-root": {
-                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-primary)",
                     "&.Mui-selected": {
-                      backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
-                      color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+                      backgroundColor: altoContraste
+                        ? "var(--color-hc-accent)"
+                        : "var(--color-primary)",
+                      color: altoContraste
+                        ? "var(--color-hc-bg)"
+                        : "var(--color-text-white)",
                     },
                     "&:hover": {
-                      backgroundColor: altoContraste ? "rgba(26,235,255,0.2)" : undefined,
+                      backgroundColor: altoContraste
+                        ? "rgba(26,235,255,0.2)"
+                        : undefined,
                     },
                   },
                   "& .MuiDayCalendar-weekDayLabel": {
-                    color: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-secondary)",
+                    color: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-text-secondary)",
                   },
                   "& .MuiPickersCalendarHeader-label": {
-                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-primary)",
                   },
                   "& .MuiIconButton-root": {
-                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-secondary)",
                   },
                   "& .MuiClock-pin, & .MuiClockPointer-root": {
-                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    backgroundColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-primary)",
                   },
                   "& .MuiClockPointer-thumb": {
-                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
-                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    backgroundColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-primary)",
+                    borderColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-primary)",
                   },
                   "& .MuiClockNumber-root": {
-                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-primary)",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-primary)",
                     "&.Mui-selected": {
-                      color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+                      color: altoContraste
+                        ? "var(--color-hc-bg)"
+                        : "var(--color-text-white)",
                     },
                   },
                   "& .MuiClock-clock": {
-                    backgroundColor: altoContraste ? "rgba(26,235,255,0.08)" : undefined,
+                    backgroundColor: altoContraste
+                      ? "rgba(26,235,255,0.08)"
+                      : undefined,
                   },
                   "& .MuiPickersLayout-actionBar .MuiButton-root": {
-                    color: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    color: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-primary)",
                   },
                   "& .MuiTabs-root .MuiTab-root": {
-                    color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-secondary)",
+                    color: altoContraste
+                      ? "var(--color-hc-text)"
+                      : "var(--color-text-secondary)",
                     "&.Mui-selected": {
-                      color: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                      color: altoContraste
+                        ? "var(--color-hc-accent)"
+                        : "var(--color-primary)",
                     },
                   },
                   "& .MuiTabs-indicator": {
-                    backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-primary)",
+                    backgroundColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-primary)",
                   },
                   "& .MuiDivider-root, & hr": {
-                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                    borderColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-text-light)",
                   },
                   "& .MuiPickersLayout-contentWrapper": {
-                    borderColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-text-light)",
+                    borderColor: altoContraste
+                      ? "var(--color-hc-accent)"
+                      : "var(--color-text-light)",
                   },
                 },
               },
@@ -311,16 +375,26 @@ export default function Modal({
           startIcon={saving ? <CircularProgress size={16} /> : null}
           sx={{
             backgroundImage: altoContraste ? "none" : "var(--gradient-button)",
-            backgroundColor: altoContraste ? "var(--color-hc-accent)" : undefined,
-            color: altoContraste ? "var(--color-hc-bg)" : "var(--color-text-white)",
+            backgroundColor: altoContraste
+              ? "var(--color-hc-accent)"
+              : undefined,
+            color: altoContraste
+              ? "var(--color-hc-bg)"
+              : "var(--color-text-white)",
             "&:hover": {
-              backgroundImage: altoContraste ? "none" : "var(--gradient-button-hover)",
+              backgroundImage: altoContraste
+                ? "none"
+                : "var(--gradient-button-hover)",
               backgroundColor: altoContraste ? "#15c4d9" : undefined,
             },
             "&.Mui-disabled": {
               backgroundImage: "none",
-              backgroundColor: altoContraste ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)",
-              color: altoContraste ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.26)",
+              backgroundColor: altoContraste
+                ? "rgba(255,255,255,0.12)"
+                : "rgba(0,0,0,0.12)",
+              color: altoContraste
+                ? "rgba(255,255,255,0.3)"
+                : "rgba(0,0,0,0.26)",
             },
           }}
         >
