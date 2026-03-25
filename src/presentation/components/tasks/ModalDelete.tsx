@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DeleteModalProps } from "@/src/domain/entities/DeleteModalProps";
+import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 export default function DeleteModal({
   open,
@@ -27,6 +28,7 @@ export default function DeleteModal({
 
   const handleConfirm = async () => {
     await onConfirm();
+    await getAllTasksUseCase.execute();
   };
 
   return (
