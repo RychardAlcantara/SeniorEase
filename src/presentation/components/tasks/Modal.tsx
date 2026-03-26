@@ -19,6 +19,7 @@ import {
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import Task from "@/src/domain/entities/Task";
 
 export default function Modal({
   type,
@@ -58,7 +59,7 @@ export default function Modal({
       };
       try {
         await createTaskUseCase.execute(newTask);
-
+        setTasks((prev: Task[]) => [...prev, newTask]);
         setSuccessMessage("Tarefa adicionada com sucesso!");
       } catch {
         setSuccessMessage("Ocorreu um erro ao adicionar a tarefa.");

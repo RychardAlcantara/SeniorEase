@@ -59,7 +59,7 @@ export default function TaskItem({
     setDeleting(true);
     const prevTasks = tasks;
     // Optimistic: remove do estado
-    setTasks(prevTasks.filter((t) => t.id !== task.id));
+    setTasks((prev) => prev.filter((t) => t.id !== task.id));
 
     try {
       await deleteTaskUseCase.execute(task.id);
