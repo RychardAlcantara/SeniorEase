@@ -46,6 +46,7 @@ export default function Modal({
 
   async function onSave() {
     if (!tasks || !setTasks) return;
+    if (!user?.id) return;
 
     setSaving(true);
     if (type === "create") {
@@ -54,7 +55,7 @@ export default function Modal({
         title: title.trim(),
         notes: notes.trim(),
         expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
-        userId: user?.id,
+        userId: user.id,
         createdAt: new Date(),
         completed: false,
         concludedAt: null,
