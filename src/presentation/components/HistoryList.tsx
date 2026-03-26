@@ -32,6 +32,21 @@ export default function HistoryList({ tasks }: { tasks: Task[] }) {
           Histórico de Tarefas
         </Typography>
 
+        {history.length === 0 ? (
+          <Typography
+            variant="body2"
+            sx={{
+              color: altoContraste
+                ? "var(--color-hc-text)"
+                : "var(--color-text-secondary)",
+              textAlign: "center",
+              py: 3,
+              opacity: 0.7,
+            }}
+          >
+            Nenhuma tarefa concluída ainda.
+          </Typography>
+        ) : (
         <Stack spacing={2}>
           {history.map((item, index) => (
             <Stack
@@ -75,6 +90,7 @@ export default function HistoryList({ tasks }: { tasks: Task[] }) {
             </Stack>
           ))}
         </Stack>
+        )}
       </CardContent>
     </Card>
   );

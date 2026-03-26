@@ -67,6 +67,21 @@ export default function TaskList({
           Minhas Tarefas
         </Typography>
 
+        {sortedTasks.length === 0 ? (
+          <Typography
+            variant="body2"
+            sx={{
+              color: altoContraste
+                ? "var(--color-hc-text)"
+                : "var(--color-text-secondary)",
+              textAlign: "center",
+              py: 3,
+              opacity: 0.7,
+            }}
+          >
+            Nenhuma tarefa pendente. Crie uma nova tarefa para começar!
+          </Typography>
+        ) : (
         <Stack spacing={0}>
           {sortedTasks.map((task: Task) => (
             <TaskItem
@@ -81,6 +96,7 @@ export default function TaskList({
             />
           ))}
         </Stack>
+        )}
       </CardContent>
     </Card>
   );

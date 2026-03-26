@@ -3,6 +3,7 @@
 import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import { useConfig } from "@/src/presentation/contexts/ConfigContext";
 import {
   deleteTaskUseCase,
   updateTaskUseCase,
@@ -25,6 +26,8 @@ export default function TaskItem({
   onDeleteSuccess,
 }: TaskItemProps) {
   const { altoContraste } = useContraste();
+  const { config } = useConfig();
+  const simplificado = config.modoVisualizacao === "simplificada";
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -206,15 +209,25 @@ export default function TaskItem({
               Editar
             </Button>
           )}
-          <Button
-            variant="text"
-            color="error"
+          {!simplificado && <Button
+            variant="outlined"
             size="small"
             onClick={() => setConfirmOpen(true)}
-            sx={{ textTransform: "none" }}
+            sx={{
+              textTransform: "none",
+              color: altoContraste ? "#FF4D4F" : undefined,
+              borderColor: altoContraste ? "#FF4D4F" : undefined,
+              "&:hover": {
+                borderColor: altoContraste ? "#FF4D4F" : undefined,
+                backgroundColor: altoContraste
+                  ? "rgba(255,77,79,0.15)"
+                  : undefined,
+              },
+            }}
+            color="error"
           >
             Excluir
-          </Button>
+          </Button>}
         </Stack>
       </Stack>
 
