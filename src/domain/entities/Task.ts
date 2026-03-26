@@ -4,6 +4,7 @@ export default interface Task {
   completed: boolean;
   createdAt: Date;
   expectedToBeDone: string | null;
+  userId: string;
   concludedAt: Date | null;
   notes?: string | null;
 }
