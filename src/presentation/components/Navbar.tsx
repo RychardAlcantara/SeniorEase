@@ -1,36 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Home,
-  ListTodo,
-  Settings,
-  LogOut,
-  Menu as MenuIcon,
-} from "lucide-react";
+import { Home, ListTodo, Settings, LogOut, Menu as MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  Container,
-  Stack,
-  IconButton,
-  Menu,
-  MenuItem,
-  useMediaQuery,
-  useTheme,
+  AppBar, Toolbar, Typography, Button, Box, Container,
+  Stack, IconButton, Menu, MenuItem, useMediaQuery, useTheme,
 } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useAuth } from "@/src/infrastructure/AuthContext";
-import {
-  signOutUseCase,
-  getUserProfileUseCase,
-} from "@/src/infrastructure/container";
+import { signOutUseCase, getUserProfileUseCase } from "@/src/infrastructure/container";
 import { UserAvatar } from "@/src/presentation/components/profile/UserAvatar";
+import { NotificationBell } from "@/src/presentation/components/NotificationBell"; // ← NOVO
 import { UserProfile } from "@/src/domain/entities/UserProfile";
 
 const links = [
@@ -58,18 +40,9 @@ export default function Navbar() {
     loadProfile();
   }, [user]);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (href: string) => {
-    handleMenuClose();
-    router.push(href);
-  };
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleMenuItemClick = (href: string) => { handleMenuClose(); router.push(href); };
 
   async function handleSignOut() {
     await signOutUseCase.execute();
@@ -105,9 +78,7 @@ export default function Navbar() {
             sx={{
               fontWeight: 700,
               fontStyle: "italic",
-              color: altoContraste
-                ? "var(--color-hc-text)"
-                : "var(--color-text-white)",
+              color: altoContraste ? "var(--color-hc-text)" : "var(--color-text-white)",
               fontSize: { xs: "1.1rem", sm: "1.5rem" },
             }}
           >
@@ -116,11 +87,7 @@ export default function Navbar() {
 
           {/* Navegação Desktop */}
           {!isMobile && (
-            <Stack
-              direction="row"
-              spacing={{ md: 2, lg: 4 }}
-              alignItems="center"
-            >
+            <Stack direction="row" spacing={{ md: 2, lg: 4 }} alignItems="center">
               {links.map((link) => (
                 <Button
                   key={link.title}
@@ -147,29 +114,23 @@ export default function Navbar() {
             <IconButton
               color="inherit"
               onClick={handleMenuOpen}
-              sx={{
-                color: altoContraste ? "var(--color-hc-text)" : "inherit",
-              }}
+              sx={{ color: altoContraste ? "var(--color-hc-text)" : "inherit" }}
             >
               <MenuIcon size={24} />
             </IconButton>
           )}
 
           {/* Ações */}
-          <Stack
-            direction="row"
-            spacing={{ xs: 0.5, sm: 1, md: 1.5 }}
-            alignItems="center"
-          >
+          <Stack direction="row" spacing={{ xs: 0.5, sm: 1, md: 1.5 }} alignItems="center">
+
+            {/* ↓ NOVO: Sino de notificações */}
+            <NotificationBell />
+
             {/* Avatar com link para perfil */}
             <Box
               component={Link}
               href="/profile"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                mr: { xs: 0.5, sm: 1 },
-              }}
+              sx={{ display: "flex", alignItems: "center", mr: { xs: 0.5, sm: 1 } }}
             >
               <UserAvatar profile={profile} size={isSmallScreen ? 32 : 40} />
             </Box>
@@ -180,22 +141,14 @@ export default function Navbar() {
                 href="/help"
                 variant="contained"
                 sx={{
-                  backgroundColor: altoContraste
-                    ? "var(--color-hc-accent)"
-                    : "var(--color-bg-card)",
-                  color: altoContraste
-                    ? "var(--color-hc-bg)"
-                    : "var(--color-primary)",
+                  backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-bg-card)",
+                  color: altoContraste ? "var(--color-hc-bg)" : "var(--color-primary)",
                   textTransform: "none",
                   fontWeight: 600,
                   borderRadius: 2,
                   fontSize: { xs: "0.75rem", sm: "0.875rem" },
                   px: { xs: 1, sm: 2 },
-                  "&:hover": {
-                    backgroundColor: altoContraste
-                      ? "#15c4d9"
-                      : "var(--color-bg-hover)",
-                  },
+                  "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "var(--color-bg-hover)" },
                 }}
               >
                 Precisa de ajuda?
@@ -207,23 +160,15 @@ export default function Navbar() {
               onClick={handleSignOut}
               startIcon={!isSmallScreen ? <LogOut size={18} /> : undefined}
               sx={{
-                backgroundColor: altoContraste
-                  ? "var(--color-hc-accent)"
-                  : "var(--color-bg-card)",
-                color: altoContraste
-                  ? "var(--color-hc-bg)"
-                  : "var(--color-primary)",
+                backgroundColor: altoContraste ? "var(--color-hc-accent)" : "var(--color-bg-card)",
+                color: altoContraste ? "var(--color-hc-bg)" : "var(--color-primary)",
                 textTransform: "none",
                 fontWeight: 600,
                 borderRadius: 2,
                 fontSize: { xs: "0.75rem", sm: "0.875rem" },
                 px: { xs: 1, sm: 2 },
                 minWidth: { xs: "auto", sm: "auto" },
-                "&:hover": {
-                  backgroundColor: altoContraste
-                    ? "#15c4d9"
-                    : "var(--color-bg-hover)",
-                },
+                "&:hover": { backgroundColor: altoContraste ? "#15c4d9" : "var(--color-bg-hover)" },
               }}
             >
               {!isSmallScreen && "Sair"}
@@ -238,12 +183,8 @@ export default function Navbar() {
           onClose={handleMenuClose}
           sx={{
             "& .MuiPaper-root": {
-              backgroundColor: altoContraste
-                ? "var(--color-hc-bg)"
-                : "var(--color-bg-card)",
-              border: altoContraste
-                ? "1px solid var(--color-hc-accent)"
-                : "none",
+              backgroundColor: altoContraste ? "var(--color-hc-bg)" : "var(--color-bg-card)",
+              border: altoContraste ? "1px solid var(--color-hc-accent)" : "none",
               mt: 1,
             },
           }}
@@ -255,9 +196,7 @@ export default function Navbar() {
               sx={{
                 color: altoContraste ? "var(--color-hc-text)" : "inherit",
                 "&:hover": {
-                  backgroundColor: altoContraste
-                    ? "rgba(21, 196, 217, 0.1)"
-                    : "rgba(0, 0, 0, 0.04)",
+                  backgroundColor: altoContraste ? "rgba(21, 196, 217, 0.1)" : "rgba(0, 0, 0, 0.04)",
                 },
               }}
             >

@@ -25,12 +25,14 @@ import Task from "@/src/domain/entities/Task";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
 import { useConfig } from "@/src/presentation/contexts/ConfigContext";
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
-import { getAllTasksUseCase } from "@/src/infrastructure/container";
+import { getAllTasksUseCase, getTasksByUserUseCase } from "@/src/infrastructure/container";
+import { useAuth } from "@/src/infrastructure/AuthContext";
 
 function TasksContent() {
   const { altoContraste, setAltoContraste } = useContraste();
   const { config, salvarConfig } = useConfig();
   const simplificado = config.modoVisualizacao === "simplificada";
+  const { user } = useAuth();
 
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -41,16 +43,18 @@ function TasksContent() {
 
   useEffect(() => {
     const loadTasks = async () => {
-      try {
-        const all = await getAllTasksUseCase.execute();
-        setTasks(all);
-      } catch (err) {
-        console.error("Erro ao carregar tarefas:", err);
-      }
+     if (!user) return;
+     
+           try {
+             const userTasks = await getTasksByUserUseCase.execute(user.id);
+             setTasks(userTasks);
+           } catch (err) {
+             console.error("Erro ao carregar tarefas:", err);
+           }
     };
 
     loadTasks();
-  }, []);
+  }, [user]);
 
   const pendentes = tasks.filter((t) => !t.completed);
   const filtro = busca.trim().toLowerCase();

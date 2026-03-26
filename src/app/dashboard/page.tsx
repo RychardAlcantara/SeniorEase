@@ -18,7 +18,7 @@ import getNextTask from "../helpers/getNextTask";
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute";
 import { useAuth } from "@/src/infrastructure/AuthContext";
 import { UserProfile } from "@/src/domain/entities/UserProfile";
-import { getUserProfileUseCase } from "@/src/infrastructure/container";
+import { getTasksByUserUseCase, getUserProfileUseCase } from "@/src/infrastructure/container";
 import { getAllTasksUseCase } from "@/src/infrastructure/container";
 
 function DashboardContent() {
@@ -59,24 +59,28 @@ function DashboardContent() {
 
   useEffect(() => {
     const loadTasks = async () => {
+      if (!user) return;
+
       try {
-        const all = await getAllTasksUseCase.execute();
-        setTasks(all);
+        const userTasks = await getTasksByUserUseCase.execute(user.id);
+        setTasks(userTasks);
       } catch (err) {
         console.error("Erro ao carregar tarefas:", err);
       }
     };
 
     loadTasks();
-  }, [open, editOpen]);
+  }, [user, open, editOpen]);
 
   const reloadTasks = async () => {
-    try {
-      const all = await getAllTasksUseCase.execute();
-      setTasks(all);
-    } catch (err) {
-      console.error("Erro ao recarregar tarefas:", err);
-    }
+     if (!user) return;
+
+      try {
+        const userTasks = await getTasksByUserUseCase.execute(user.id);
+        setTasks(userTasks);
+      } catch (err) {
+        console.error("Erro ao carregar tarefas:", err);
+      }
   };
 
   return (
