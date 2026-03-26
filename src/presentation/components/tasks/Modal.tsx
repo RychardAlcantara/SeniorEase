@@ -19,6 +19,7 @@ import {
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import { useAuth } from "@/src/infrastructure/AuthContext";
 
 export default function Modal({
   type,
@@ -41,6 +42,7 @@ export default function Modal({
   );
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
 
   async function onSave() {
     if (!tasks || !setTasks) return;
@@ -52,6 +54,7 @@ export default function Modal({
         title: title.trim(),
         notes: notes.trim(),
         expectedToBeDone: toDoDate ? toDoDate.toISOString() : null,
+        userId: user?.id,
         createdAt: new Date(),
         completed: false,
         concludedAt: null,

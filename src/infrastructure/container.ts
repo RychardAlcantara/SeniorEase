@@ -12,10 +12,16 @@ import { CreateTask } from "../domain/usecases/CreateTask";
 import { GetAllTasks } from "../domain/usecases/GetAllTasks";
 import { UpdateTask } from "../domain/usecases/UpdateTask";
 import { DeleteTask } from "../domain/usecases/DeleteTask";
+import { CheckTodayTasksUseCase } from "../domain/usecases/CheckTodayTasksUseCase"
+import { GetUnreadNotificationsUseCase } from "../domain/usecases/GetUnreadNotificationsUseCase"
+import { MarkNotificationReadUseCase, MarkAllNotificationsReadUseCase } from "../domain/usecases/MarkNotificationReadUseCase"
+import { FirebaseNotificationRepository } from "./repositories/FirebaseNotificationRepository";
+import { GetTasksByUser } from "../domain/usecases/GetTasksByUser";
 
 const authRepository = new FirebaseAuthRepository();
 const taskRepository = new TaskRepositoryImpl();
 const userProfileRepository = new FirebaseUserProfileRepository()
+const notificationRepository = new FirebaseNotificationRepository()
 
 export const signInUseCase = new SignInUseCase(authRepository);
 export const signUpUseCase = new SignUpUseCase(authRepository, userProfileRepository)
@@ -29,3 +35,9 @@ export const createTaskUseCase = new CreateTask(taskRepository);
 export const updateTaskUseCase = new UpdateTask(taskRepository);
 export const getAllTasksUseCase = new GetAllTasks(taskRepository);
 export const deleteTaskUseCase = new DeleteTask(taskRepository);
+export const getTasksByUserUseCase = new GetTasksByUser(taskRepository);
+
+export const checkTodayTasksUseCase = new CheckTodayTasksUseCase(notificationRepository)
+export const getUnreadNotificationsUseCase = new GetUnreadNotificationsUseCase(notificationRepository)
+export const markNotificationReadUseCase = new MarkNotificationReadUseCase(notificationRepository)
+export const markAllNotificationsReadUseCase = new MarkAllNotificationsReadUseCase(notificationRepository)

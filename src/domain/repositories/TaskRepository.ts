@@ -5,6 +5,8 @@ export interface TaskRepository {
 
   getAll(): Promise<Task[]>;
 
+  getByUserId(userId: string): Promise<Task[]>;
+
   update(task: Task): Promise<Task>;
 
   delete(id: string): Promise<void>;

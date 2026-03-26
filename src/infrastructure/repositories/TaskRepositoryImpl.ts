@@ -16,6 +16,11 @@ export class TaskRepositoryImpl implements TaskRepository {
     return JSON.parse(localStorage.getItem("tasks") || "[]");
   }
 
+  async getByUserId(userId: string): Promise<Task[]> {
+    const tasks: Task[] = JSON.parse(localStorage.getItem("tasks") || "[]");
+    return tasks.filter((t) => t.userId === userId);
+  }
+
   async update(task: Task): Promise<Task> {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
