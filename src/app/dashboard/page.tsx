@@ -47,9 +47,14 @@ function DashboardContent() {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const tarefasHoje = tasks.filter((t) => {
-    if (!t.expectedToBeDone) return false;
+    if (!t.expectedToBeDone || t.completed) return false;
     const dataTarefa = new Date(t.expectedToBeDone);
-    return dataTarefa.getDate() === new Date().getDate();
+    const hoje = new Date();
+    return (
+      dataTarefa.getFullYear() === hoje.getFullYear() &&
+      dataTarefa.getMonth() === hoje.getMonth() &&
+      dataTarefa.getDate() === hoje.getDate()
+    );
   });
   const next = getNextTask(tasks);
 
