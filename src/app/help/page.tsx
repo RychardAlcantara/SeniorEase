@@ -19,7 +19,7 @@ const guiaSections = [
   {
     titulo: "Como criar uma tarefa",
     descricao:
-      'Na tela principal (Início), clique no botão "Criar nova tarefa". Preencha o nome da tarefa, a data e confirme. Ela aparecerá na seção "Minhas Tarefas".',
+      'Clique no botão "Criar nova tarefa" presente na tela principal (Início) ou na tela de Tarefas. Preencha o nome da tarefa, a data e confirme. Ela aparecerá na seção "Minhas Tarefas".',
   },
   {
     titulo: "Como concluir uma tarefa",
@@ -62,12 +62,12 @@ const faqItems = [
   {
     pergunta: "Minhas configurações são salvas automaticamente?",
     resposta:
-      'Não. Na tela de Configurações, você precisa clicar no botão "Salvar configurações" para que as alterações sejam mantidas. Se sair da tela sem salvar, as mudanças serão descartadas.',
+      'Sim. Na tela de Configurações, todas as alterações são aplicadas e salvas automaticamente assim que você seleciona uma opção. Não é necessário clicar em nenhum botão para confirmar.',
   },
   {
     pergunta: "Como aumento o tamanho das letras?",
     resposta:
-      'Acesse Configurações na barra de navegação e na seção "Tamanho da Fonte" escolha entre A- (menor), A (normal) ou A+ (maior). Clique em "Salvar configurações" para aplicar.',
+      'Acesse Configurações na barra de navegação e na seção "Tamanho da Fonte" escolha entre A- (menor), A (normal) ou A+ (maior). A alteração será aplicada automaticamente.',
   },
   {
     pergunta: "O que é o espaçamento ampliado?",
