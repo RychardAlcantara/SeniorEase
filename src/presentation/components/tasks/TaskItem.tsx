@@ -8,6 +8,7 @@ import {
   deleteTaskUseCase,
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
+import { useToast } from "@/src/presentation/contexts/ToastContext";
 import Task from "@/src/domain/entities/Task";
 import { useState } from "react";
 import DeleteModal from "./ModalDelete";
@@ -27,6 +28,7 @@ export default function TaskItem({
 }: TaskItemProps) {
   const { altoContraste } = useContraste();
   const { config } = useConfig();
+  const { showSuccess, showError } = useToast();
   const simplificado = config.modoVisualizacao === "simplificada";
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -50,8 +52,9 @@ export default function TaskItem({
         completed: true,
         concludedAt: new Date(),
       } as Task);
+      showSuccess("Tarefa concluída com sucesso!");
     } catch {
-      console.error("Erro ao concluir tarefa:");
+      showError("Erro ao concluir a tarefa.");
     }
   }
 
@@ -64,9 +67,10 @@ export default function TaskItem({
     try {
       await deleteTaskUseCase.execute(task.id);
       setConfirmOpen(false);
+      showSuccess("Tarefa excluída com sucesso!");
       onDeleteSuccess?.();
     } catch (e) {
-      console.error("Erro ao excluir tarefa:", e);
+      showError("Erro ao excluir a tarefa.");
       // Reverte estado em caso de falha
       setTasks(prevTasks);
     } finally {

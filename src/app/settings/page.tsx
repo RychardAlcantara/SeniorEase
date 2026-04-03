@@ -3,6 +3,7 @@
 import Navbar from "@/src/presentation/components/Navbar"
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext"
 import { useConfig } from "@/src/presentation/contexts/ConfigContext"
+import { useToast } from "@/src/presentation/contexts/ToastContext"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
@@ -21,6 +22,7 @@ import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 function SettingsContent() {
   const { altoContraste, setAltoContraste } = useContraste()
   const { config, salvarConfig } = useConfig()
+  const { showSuccess } = useToast()
 
   function updateConfig(changes: Partial<typeof config>) {
     const newConfig = {
@@ -34,6 +36,7 @@ function SettingsContent() {
       setAltoContraste(!!changes.altoContraste)
     }
     salvarConfig(newConfig)
+    showSuccess("Configuração salva com sucesso!")
   }
 
   const fontSizes = [
