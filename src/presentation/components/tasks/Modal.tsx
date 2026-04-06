@@ -8,7 +8,6 @@ import {
   Button,
   TextField,
   Stack,
-  Alert,
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
@@ -19,6 +18,8 @@ import {
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import { useToast } from "@/src/presentation/contexts/ToastContext";
+import Task from "@/src/domain/entities/Task";
 import { useAuth } from "@/src/infrastructure/AuthContext";
 
 export default function Modal({
@@ -32,6 +33,7 @@ export default function Modal({
   dayjs.locale("pt-br");
 
   const { altoContraste } = useContraste();
+  const { showSuccess, showError } = useToast();
 
   const [title, setTitle] = useState(selectedTask?.title ?? "");
   const [notes, setNotes] = useState(selectedTask?.notes ?? "");
@@ -40,7 +42,6 @@ export default function Modal({
       ? dayjs(selectedTask.expectedToBeDone)
       : null,
   );
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
 
@@ -62,10 +63,10 @@ export default function Modal({
       };
       try {
         await createTaskUseCase.execute(newTask);
-
-        setSuccessMessage("Tarefa adicionada com sucesso!");
+        setTasks((prev: Task[]) => [...prev, newTask]);
+        showSuccess("Tarefa adicionada com sucesso!");
       } catch {
-        setSuccessMessage("Ocorreu um erro ao adicionar a tarefa.");
+        showError("Ocorreu um erro ao adicionar a tarefa.");
       }
     } else if (type === "edit" && selectedTask) {
       try {
@@ -77,24 +78,21 @@ export default function Modal({
         };
 
         await updateTaskUseCase.execute(taskToUpdate);
-        setSuccessMessage("Tarefa editada com sucesso!");
+        showSuccess("Tarefa editada com sucesso!");
       } catch {
-        setSuccessMessage("Ocorreu um erro ao editar a tarefa.");
+        showError("Ocorreu um erro ao editar a tarefa.");
       }
     } else {
       setSaving(false);
       return;
     }
 
-    // Aguarda um pouco para o usuário ver a mensagem e fecha
-    setTimeout(() => {
-      setSaving(false);
-      onClose();
-    }, 1500);
+    setSaving(false);
+    onClose();
   }
 
   const modalTitle = type === "create" ? "Criar nova tarefa" : "Editar tarefa";
-  const disableInputs = saving || !!successMessage;
+  const disableInputs = saving;
 
   return (
     <Dialog
@@ -129,8 +127,6 @@ export default function Modal({
         }}
       >
         <Stack spacing={2}>
-          {successMessage && <Alert severity="success">{successMessage}</Alert>}
-
           <TextField
             label="Título da Tarefa"
             fullWidth

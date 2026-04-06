@@ -3,6 +3,7 @@
 import Navbar from "@/src/presentation/components/Navbar"
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext"
 import { useConfig } from "@/src/presentation/contexts/ConfigContext"
+import { useToast } from "@/src/presentation/contexts/ToastContext"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
@@ -13,86 +14,29 @@ import Button from "@mui/material/Button"
 import Radio from "@mui/material/Radio"
 import RadioGroup from "@mui/material/RadioGroup"
 import FormControlLabel from "@mui/material/FormControlLabel"
-import Snackbar from "@mui/material/Snackbar"
-import Alert from "@mui/material/Alert"
-import { useState, useEffect, useRef } from "react"
+
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 
-const fontSizeMap = ["14px", "16px", "20px"]
-const letterSpacingMap: Record<string, string> = { normal: "0px", ampliado: "1px" }
+
 
 function SettingsContent() {
   const { altoContraste, setAltoContraste } = useContraste()
   const { config, salvarConfig } = useConfig()
+  const { showSuccess } = useToast()
 
-  // Inicializa com defaults para evitar hydration mismatch
-  const [fontSize, setFontSize] = useState(1)
-  const [espacamento, setEspacamento] = useState("normal")
-  const [modoVisualizacao, setModoVisualizacao] = useState("simplificada")
-  const [snackOpen, setSnackOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const configRef = useRef(config)
-
-  // Mantém ref atualizada com o config mais recente
-  useEffect(() => {
-    configRef.current = config
-  }, [config])
-
-  // Sincroniza com config salva após hydration
-  useEffect(() => {
-    setFontSize(config.fontSize)
-    setEspacamento(config.espacamento)
-    setModoVisualizacao(config.modoVisualizacao)
-    setAltoContraste(config.altoContraste)
-    setMounted(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Preview de font-size na tela inteira (sem salvar)
-  useEffect(() => {
-    if (!mounted) return
-    document.documentElement.style.fontSize = fontSizeMap[fontSize]
-  }, [fontSize, mounted])
-
-  // Preview de letter-spacing na tela inteira (sem salvar)
-  useEffect(() => {
-    if (!mounted) return
-    const existing = document.getElementById("preview-letter-spacing")
-    if (existing) existing.remove()
-    const tag = document.createElement("style")
-    tag.id = "preview-letter-spacing"
-    tag.textContent = `* { letter-spacing: ${letterSpacingMap[espacamento]} !important; }`
-    document.head.appendChild(tag)
-
-    return () => {
-      const el = document.getElementById("preview-letter-spacing")
-      if (el) el.remove()
-    }
-  }, [espacamento, mounted])
-
-  // Ao sair da página, reverte para os valores SALVOS (não os do preview)
-  useEffect(() => {
-    return () => {
-      const saved = configRef.current
-      document.documentElement.style.fontSize = fontSizeMap[saved.fontSize]
-      const existing = document.getElementById("preview-letter-spacing")
-      if (existing) existing.remove()
-      const tag = document.createElement("style")
-      tag.id = "preview-letter-spacing"
-      tag.textContent = `* { letter-spacing: ${letterSpacingMap[saved.espacamento]} !important; }`
-      document.head.appendChild(tag)
-    }
-  }, [])
-
-  function handleSalvar() {
-    const novaConfig = {
-      fontSize,
-      espacamento,
+  function updateConfig(changes: Partial<typeof config>) {
+    const newConfig = {
+      fontSize: config.fontSize,
+      espacamento: config.espacamento,
       altoContraste,
-      modoVisualizacao,
+      modoVisualizacao: config.modoVisualizacao,
+      ...changes,
     }
-    salvarConfig(novaConfig)
-    setSnackOpen(true)
+    if ('altoContraste' in changes) {
+      setAltoContraste(!!changes.altoContraste)
+    }
+    salvarConfig(newConfig)
+    showSuccess("Configuração salva com sucesso!")
   }
 
   const fontSizes = [
@@ -163,15 +107,15 @@ function SettingsContent() {
 							{fontSizes.map((fs) => (
 								<Stack key={fs.value} alignItems="center" spacing={0.5}>
 									<Button
-										variant={fontSize === fs.value ? "contained" : "outlined"}
-										onClick={() => setFontSize(fs.value)}
+								variant={config.fontSize === fs.value ? "contained" : "outlined"}
+									onClick={() => updateConfig({ fontSize: fs.value })}
 										sx={{
 											minWidth: 56,
 											minHeight: 56,
 											fontSize: fs.value === 0 ? "0.875rem" : fs.value === 1 ? "1rem" : "1.25rem",
 											fontWeight: 700,
 											borderRadius: 2,
-											...(fontSize === fs.value
+											...(config.fontSize === fs.value
 											? {
 												bgcolor: hc ? "var(--color-hc-accent)" : "var(--color-primary)",
 												color: hc ? "var(--color-hc-bg)" : "#fff",
@@ -209,7 +153,7 @@ function SettingsContent() {
 						<Typography sx={titleSx}>Contraste</Typography>
 						<RadioGroup
 						value={hc ? "alto" : "normal"}
-						onChange={(e) => setAltoContraste(e.target.value === "alto")}
+						onChange={(e) => updateConfig({ altoContraste: e.target.value === "alto" })}
 						>
 							<FormControlLabel
 								value="normal"
@@ -230,8 +174,8 @@ function SettingsContent() {
 					<CardContent sx={{ p: 3 }}>
 						<Typography sx={titleSx}>Espaçamento entre letras</Typography>
 						<RadioGroup
-						value={espacamento}
-						onChange={(e) => setEspacamento(e.target.value)}
+						value={config.espacamento}
+						onChange={(e) => updateConfig({ espacamento: e.target.value })}
 						>
 						<FormControlLabel
 							value="normal"
@@ -252,8 +196,8 @@ function SettingsContent() {
 					<CardContent sx={{ p: 3 }}>
 						<Typography sx={titleSx}>Modo de visualização</Typography>
 						<RadioGroup
-						value={modoVisualizacao}
-						onChange={(e) => setModoVisualizacao(e.target.value)}
+						value={config.modoVisualizacao}
+						onChange={(e) => updateConfig({ modoVisualizacao: e.target.value })}
 						>
 						<FormControlLabel
 							value="simplificada"
@@ -270,41 +214,7 @@ function SettingsContent() {
 				</Card>
 			</Stack>
 
-			{/* Botão Salvar */}
-			<Button
-				variant="contained"
-				onClick={handleSalvar}
-				sx={{
-					mt: 4,
-					width: "100%",
-					py: 1.5,
-					fontSize: "1.125rem",
-					fontWeight: 700,
-					borderRadius: 2,
-					textTransform: "none",
-					backgroundImage: hc ? "none" : "var(--gradient-button)",
-					bgcolor: hc ? "var(--color-hc-accent)" : undefined,
-					color: hc ? "var(--color-hc-bg)" : "#fff",
-					border: hc ? "2px solid var(--color-hc-accent)" : "none",
-					"&:hover": {
-						backgroundImage: hc ? "none" : "var(--gradient-button-hover)",
-						bgcolor: hc ? "#15c4d9" : undefined,
-					},
-				}}
-			>
-				Salvar configurações
-			</Button>
 
-			<Snackbar
-				open={snackOpen}
-				autoHideDuration={3000}
-				onClose={() => setSnackOpen(false)}
-				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-			>
-				<Alert onClose={() => setSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
-					Configurações salvas com sucesso!
-				</Alert>
-			</Snackbar>
 	  </Container>
 	</Box>
 	</PrivateRoute>

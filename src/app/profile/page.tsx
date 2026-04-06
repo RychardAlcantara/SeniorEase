@@ -6,13 +6,12 @@ import {
   Box, Container, Paper, Typography,
   TextField, Button, CircularProgress, Divider, Tab, Tabs
 } from "@mui/material"
-import { Save, ArrowBack, Lock, Person } from "@mui/icons-material"
-import Link from "next/link"
+import { Save, Lock, Person } from "@mui/icons-material"
 import { PrivateRoute } from "@/src/presentation/components/PrivateRoute"
 import { PhotoUpload } from "@/src/presentation/components/profile/PhotoUpload"
-import { AlertMessage } from "@/src/presentation/components/auth/AlertMessage"
 import { PasswordInput } from "@/src/presentation/components/auth/PasswordInput"
 import { useAuth } from "@/src/infrastructure/AuthContext"
+import { useToast } from "@/src/presentation/contexts/ToastContext"
 import {
   getUserProfileUseCase,
   saveUserProfileUseCase,
@@ -23,6 +22,7 @@ import Navbar from "@/src/presentation/components/Navbar"
 
 export default function ProfilePage() {
   const { user } = useAuth()
+  const { showSuccess, showError } = useToast()
   const router = useRouter()
   const [tab, setTab] = useState(0)
  
@@ -34,16 +34,12 @@ export default function ProfilePage() {
   const [previewURL, setPreviewURL] = useState<string | undefined>()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [profileError, setProfileError] = useState("")
-  const [profileSuccess, setProfileSuccess] = useState("")
  
   // --- estado da senha ---
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [changingPassword, setChangingPassword] = useState(false)
-  const [passwordError, setPasswordError] = useState("")
-  const [passwordSuccess, setPasswordSuccess] = useState("")
  
   useEffect(() => {
     async function loadProfile() {
@@ -72,8 +68,6 @@ export default function ProfilePage() {
  
   async function handleSaveProfile() {
     if (!user) return
-    setProfileError("")
-    setProfileSuccess("")
     setSaving(true)
     try {
       const profile: UserProfile = {
@@ -85,27 +79,25 @@ export default function ProfilePage() {
       }
       await saveUserProfileUseCase.execute(profile, photoFile)
       setPhotoFile(undefined)
-      setProfileSuccess("Perfil atualizado com sucesso!")
+      showSuccess("Perfil atualizado com sucesso!")
       setTimeout(() => router.push("/dashboard"), 3000)
     } catch (err: any) {
-      setProfileError(err.message)
+      showError(err.message || "Erro ao salvar o perfil.")
     } finally {
       setSaving(false)
     }
   }
  
   async function handleChangePassword() {
-    setPasswordError("")
-    setPasswordSuccess("")
     setChangingPassword(true)
     try {
       await changePasswordUseCase.execute(currentPassword, newPassword, confirmPassword)
-      setPasswordSuccess("Senha alterada com sucesso!")
+      showSuccess("Senha alterada com sucesso!")
       setCurrentPassword("")
       setNewPassword("")
       setConfirmPassword("")
     } catch (err: any) {
-      setPasswordError(err.message)
+      showError(err.message || "Erro ao alterar a senha.")
     } finally {
       setChangingPassword(false)
     }
@@ -158,9 +150,6 @@ export default function ProfilePage() {
                   {/* Aba - Dados Pessoais */}
                   {tab === 0 && (
                     <Box display="flex" flexDirection="column" gap={3}>
- 
-                      {profileError && <AlertMessage type="error" message={profileError} />}
-                      {profileSuccess && <AlertMessage type="success" message={profileSuccess} />}
  
                       <Box display="flex" justifyContent="center">
                         <PhotoUpload
@@ -222,9 +211,6 @@ export default function ProfilePage() {
                   {/* Aba - Alterar Senha */}
                   {tab === 1 && (
                     <Box display="flex" flexDirection="column" gap={3}>
- 
-                      {passwordError && <AlertMessage type="error" message={passwordError} />}
-                      {passwordSuccess && <AlertMessage type="success" message={passwordSuccess} />}
  
                       <Typography variant="body2" color="text.secondary">
                         Para sua segurança, informe a senha atual antes de definir uma nova.

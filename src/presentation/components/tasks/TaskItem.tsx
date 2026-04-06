@@ -3,10 +3,12 @@
 import TaskItemProps from "@/src/domain/entities/TaskItem";
 import { Box, Stack, Typography, Button, Divider } from "@mui/material";
 import { useContraste } from "@/src/presentation/contexts/ContrasteContext";
+import { useConfig } from "@/src/presentation/contexts/ConfigContext";
 import {
   deleteTaskUseCase,
   updateTaskUseCase,
 } from "@/src/infrastructure/container";
+import { useToast } from "@/src/presentation/contexts/ToastContext";
 import Task from "@/src/domain/entities/Task";
 import { useState } from "react";
 import DeleteModal from "./ModalDelete";
@@ -25,6 +27,9 @@ export default function TaskItem({
   onDeleteSuccess,
 }: TaskItemProps) {
   const { altoContraste } = useContraste();
+  const { config } = useConfig();
+  const { showSuccess, showError } = useToast();
+  const simplificado = config.modoVisualizacao === "simplificada";
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -47,8 +52,9 @@ export default function TaskItem({
         completed: true,
         concludedAt: new Date(),
       } as Task);
+      showSuccess("Tarefa concluída com sucesso!");
     } catch {
-      console.error("Erro ao concluir tarefa:");
+      showError("Erro ao concluir a tarefa.");
     }
   }
 
@@ -56,14 +62,15 @@ export default function TaskItem({
     setDeleting(true);
     const prevTasks = tasks;
     // Optimistic: remove do estado
-    setTasks(prevTasks.filter((t) => t.id !== task.id));
+    setTasks((prev) => prev.filter((t) => t.id !== task.id));
 
     try {
       await deleteTaskUseCase.execute(task.id);
       setConfirmOpen(false);
+      showSuccess("Tarefa excluída com sucesso!");
       onDeleteSuccess?.();
     } catch (e) {
-      console.error("Erro ao excluir tarefa:", e);
+      showError("Erro ao excluir a tarefa.");
       // Reverte estado em caso de falha
       setTasks(prevTasks);
     } finally {
@@ -206,15 +213,25 @@ export default function TaskItem({
               Editar
             </Button>
           )}
-          <Button
-            variant="text"
-            color="error"
+          {!simplificado && <Button
+            variant="outlined"
             size="small"
             onClick={() => setConfirmOpen(true)}
-            sx={{ textTransform: "none" }}
+            sx={{
+              textTransform: "none",
+              color: altoContraste ? "#FF4D4F" : undefined,
+              borderColor: altoContraste ? "#FF4D4F" : undefined,
+              "&:hover": {
+                borderColor: altoContraste ? "#FF4D4F" : undefined,
+                backgroundColor: altoContraste
+                  ? "rgba(255,77,79,0.15)"
+                  : undefined,
+              },
+            }}
+            color="error"
           >
             Excluir
-          </Button>
+          </Button>}
         </Stack>
       </Stack>
 

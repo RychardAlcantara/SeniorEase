@@ -8,7 +8,6 @@ export class CheckTodayTasksUseCase {
     const now = new Date()
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    const todayStr = today.toISOString().split("T")[0]
 
     for (const task of tasks) {
       if (!task.expectedToBeDone || task.completed) continue
@@ -20,7 +19,10 @@ export class CheckTodayTasksUseCase {
       const diffMinutes = diffMs / 1000 / 60
 
       // Gatilho 1: No dia da tarefa (vence hoje)
-      const isDueToday = task.expectedToBeDone.startsWith(todayStr)
+      const isDueToday =
+        dueDate.getFullYear() === today.getFullYear() &&
+        dueDate.getMonth() === today.getMonth() &&
+        dueDate.getDate() === today.getDate()
 
       // Gatilho 2: 1 hora antes (entre 50 e 70 minutos para vencer)
       const isOneHourBefore = diffMinutes >= 50 && diffMinutes <= 70
