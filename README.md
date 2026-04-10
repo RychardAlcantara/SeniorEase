@@ -238,11 +238,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 FIREBASE_ADMIN_CLIENT_EMAIL=
 FIREBASE_ADMIN_PRIVATE_KEY=
 ```
-
-> Para obter as variáveis do Firebase Client SDK, acesse **Firebase Console → Configurações do projeto → Seus apps**.
-> Para o Firebase Admin SDK, acesse **Firebase Console → Configurações do projeto → Contas de serviço → Gerar nova chave privada**.
-> Para o Gmail, gere uma **App Password** em [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) com o 2FA ativado.
-
 ---
 
 ## Como Executar o Projeto
