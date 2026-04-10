@@ -279,7 +279,7 @@ npm install
 **3. Configure as variáveis de ambiente**
 
 ```bash
-cp .env.example .env
+cp .env.local.example .env.local
 ```
 
 Preencha todas as variáveis conforme a seção anterior.
